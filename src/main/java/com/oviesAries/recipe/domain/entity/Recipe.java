@@ -10,6 +10,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @AllArgsConstructor
+@Builder
 public class Recipe {
 
     @Id
@@ -17,7 +18,7 @@ public class Recipe {
     @Column(name = "recipe_id")
     private Long id;
 
-    private String dish_name;
+    private String dishName;
 
     private Integer totalTime;
 
