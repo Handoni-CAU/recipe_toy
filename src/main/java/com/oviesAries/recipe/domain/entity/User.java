@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Entity
 @Table(name = "USER")
@@ -26,4 +27,19 @@ public class User {
 
     private String password;
 
+
+    public void updatePassword(String password) {
+        this.password = password;
+    }
+    public void updateNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public void updateUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public void encodePassword(PasswordEncoder passwordEncoder) {
+        this.password = passwordEncoder.encode(this.password);
+    }
 }
