@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @Builder
+@Table(name = "user_ingredient")
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserIngredient {
