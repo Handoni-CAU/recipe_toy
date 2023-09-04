@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "recipe_step")
 public class RecipeStep {
 
     @Id
@@ -22,8 +23,7 @@ public class RecipeStep {
     private Recipe recipe;
 
     private String description;
-    // 스텝 설명
+
     private String imagePath;
-    // 실제 이미지를 저장하려면 다른 방법 사용 필요.
 
 }

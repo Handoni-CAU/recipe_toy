@@ -5,6 +5,7 @@ import com.oviesAries.recipe.domain.recipe.dao.RecipeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,18 +23,26 @@ public class RecipeServiceImpl implements RecipeService{
     }
 
     @Override
+    @Transactional
     public Recipe createRecipe(String recipeName) {
         Recipe recipe = Recipe.builder()
                 .dishName(recipeName)
                 .steps(new ArrayList<>())
                 .build();
 
-        return recipeRepository.save(recipe);
+        recipeRepository.save(recipe);
+
+        return recipe;
     }
 
     @Override
     public Recipe getRecipeById(Long id) {
-        return recipeRepository.findById(String.valueOf(id)).orElse(null);
+        return recipeRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public Recipe getRecipeByDishName(String dishName) {
+        return recipeRepository.findByDishName(dishName).orElse(null);
     }
 
 }
