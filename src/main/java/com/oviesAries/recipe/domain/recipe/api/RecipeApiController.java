@@ -6,6 +6,7 @@ import com.oviesAries.recipe.domain.recipe.dto.RecipeResponse;
 import com.oviesAries.recipe.domain.recipe.service.RecipeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,5 +53,6 @@ public class RecipeApiController {
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
+
 
 }

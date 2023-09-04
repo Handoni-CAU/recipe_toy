@@ -9,5 +9,4 @@ import lombok.Data;
 public class RecipeCreateRequest {
 
     private String dishName;
-
 }

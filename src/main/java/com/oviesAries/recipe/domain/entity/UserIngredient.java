@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @Builder
-@Table(name = "user_ingredient")
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "user_ingredients")
 public class UserIngredient {
 
     @Id

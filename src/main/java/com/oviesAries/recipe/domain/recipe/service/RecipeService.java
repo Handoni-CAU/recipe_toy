@@ -15,4 +15,7 @@ public interface RecipeService {
 
     Recipe getRecipeById(Long id);
 
+    Recipe getRecipeByDishName(String dishName);
+
+
 }
