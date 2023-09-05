@@ -23,24 +23,18 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 
-
     @Override
-    public User getUser(String username) {
-        return userRepository.findById(username).orElse(null);
+    public User getUserByUserName(String userName) {
+        return userRepository.findByUserName(userName).orElse(null);
     }
 
     @Override
-    public User updateUser(String username, String password) {
-        User user = User.builder()
-                .userName(username)
-                .password(passwordEncoder.encode(password))
-                .build();
-
-        return userRepository.save(user);
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
     }
 
     @Override
-    public void deleteUser(String username) {
-        userRepository.deleteById(username);
+    public User getUserById(Long id) {
+        return userRepository.findById(id).orElse(null);
     }
 }

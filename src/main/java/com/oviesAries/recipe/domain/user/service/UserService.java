@@ -3,11 +3,11 @@ package com.oviesAries.recipe.domain.user.service;
 import com.oviesAries.recipe.domain.entity.User;
 
 public interface UserService {
-    public User createUser(String username, String password);
+    User createUser(String userName, String password);
 
-    public User getUser(String username);
+    User getUserByUserName(String userName);
 
-    public User updateUser(String username, String password);
+    void deleteUser(Long id);
 
-    public void deleteUser(String username);
+    User getUserById(Long id);
 }
