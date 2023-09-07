@@ -1,13 +1,11 @@
 package com.oviesAries.recipe.domain.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,8 +20,12 @@ public class RecipeStep {
     @JoinColumn(name = "recipe_id")
     private Recipe recipe;
 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer stepOrder;
+
     private String description;
 
     private String imagePath;
+
 
 }

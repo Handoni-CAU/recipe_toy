@@ -9,6 +9,7 @@ import java.util.List;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Setter
 @AllArgsConstructor
 @Builder
 public class Recipe {
