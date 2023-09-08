@@ -26,6 +26,13 @@ public class RecipeIngredient {
     @JoinColumn(name = "ingredient_id")
     private Ingredient ingredient;
 
-    private int quantity;
+    private Integer quantity;
 
+    public void setRecipe(Recipe recipe) {
+        this.recipe = recipe;
+    }
+
+    public void setIngredient(Ingredient ingredient) {
+        this.ingredient = ingredient;
+    }
 }

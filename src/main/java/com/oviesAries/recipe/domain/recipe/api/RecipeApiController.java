@@ -1,18 +1,16 @@
 package com.oviesAries.recipe.domain.recipe.api;
 
 import com.oviesAries.recipe.domain.entity.Recipe;
+import com.oviesAries.recipe.domain.entity.RecipeIngredient;
 import com.oviesAries.recipe.domain.entity.RecipeStep;
-import com.oviesAries.recipe.domain.recipe.dto.RecipeCreateDTO;
-import com.oviesAries.recipe.domain.recipe.dto.RecipeResponse;
-import com.oviesAries.recipe.domain.recipe.dto.RecipeStepDTO;
-import com.oviesAries.recipe.domain.recipe.dto.RecipeStepResponse;
+import com.oviesAries.recipe.domain.recipe.dto.*;
 import com.oviesAries.recipe.domain.recipe.service.RecipeService;
+import com.oviesAries.recipe.domain.utill.RecipeMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,24 +26,8 @@ public class RecipeApiController {
         List<Recipe> recipes = recipeService.getAllRecipes();
 
         List<RecipeResponse> response = recipes.stream()
-                .map(recipe -> {
-                    List<RecipeStepDTO> stepResponses = recipe.getSteps().stream()
-                            .map(step -> RecipeStepDTO.builder()
-                                    .stepOrder(step.getStepOrder())
-                                    .description(step.getDescription())
-                                    .imagePath(step.getImagePath())
-                                    .build())
-                            .collect(Collectors.toList());
-
-                    return RecipeResponse.builder()
-                            .id(recipe.getId())
-                            .dishName(recipe.getDishName())
-                            .totalTime(recipe.getTotalTime())
-                            .recipeSteps(stepResponses)
-                            .build();
-                })
+                .map(RecipeMapper::toRecipeResponse)
                 .collect(Collectors.toList());
-
 
         return ResponseEntity.ok(response);
     }
@@ -58,61 +40,61 @@ public class RecipeApiController {
             return ResponseEntity.notFound().build();
         }
 
-        List<RecipeStepDTO> stepResponses = recipe.getSteps().stream()
-                .map(step -> RecipeStepDTO.builder()
-                        .stepOrder(step.getStepOrder())
-                        .description(step.getDescription())
-                        .imagePath(step.getImagePath())
-                        .build())
-                .collect(Collectors.toList());
-
-        RecipeResponse response = RecipeResponse.builder()
-                .id(recipe.getId())
-                .dishName(recipe.getDishName())
-                .totalTime(recipe.getTotalTime())
-                .recipeSteps(stepResponses)
-                .build();
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(RecipeMapper.toRecipeResponse(recipe));
     }
+
+    @GetMapping("/{dishName}/steps/{stepOrder}")
+    public ResponseEntity<RecipeStepResponse> retrieveStepByStepOrder(
+            @PathVariable Integer stepOrder) {
+
+        RecipeStep recipeStep = recipeService.getStepByStepOrder(stepOrder);
+
+        return ResponseEntity.ok(RecipeMapper.toStepResponse(recipeStep));
+    }
+
 
     @PostMapping("/{dishName}/steps")
     public ResponseEntity<RecipeStepResponse> createRecipeStep(
             @PathVariable String dishName,
             @RequestBody RecipeStepDTO stepDTO) {
 
-        RecipeStep newStep = RecipeStep.builder()
-                .description(stepDTO.getDescription())
-                .imagePath(stepDTO.getImagePath())
-                .build();
+        RecipeStep savedStep = recipeService.addStepToRecipe(dishName, RecipeMapper.toStepEntity(stepDTO));
 
-        RecipeStep savedStep = recipeService.addStepToRecipe(dishName, newStep);
-
-        RecipeStepResponse response = RecipeStepResponse.builder()
-                .id(savedStep.getId())
-                .stepOrder(savedStep.getStepOrder())
-                .description(savedStep.getDescription())
-                .imagePath(savedStep.getImagePath())
-                .build();
-
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        return new ResponseEntity<>(RecipeMapper.toStepResponse(savedStep), HttpStatus.CREATED);
     }
 
+    @PostMapping("/{dishName}/ingredients")
+    public ResponseEntity<RecipeIngredientResponse> createRecipeIngredient(
+            @PathVariable String dishName,
+            @RequestBody RecipeIngredientDTO ingredientDTO) {
+
+        RecipeIngredient savedStep = recipeService.addIngredientToRecipe(dishName, RecipeMapper.toIngredientEntity(ingredientDTO));
+
+        return new ResponseEntity<>(RecipeMapper.toIngredientResponse(savedStep), HttpStatus.CREATED);
+    }
 
     @PostMapping("/create")
     public ResponseEntity<RecipeResponse> createRecipe(@RequestBody RecipeCreateDTO request) {
         Recipe createdRecipe = recipeService.createRecipe(request.getDishName());
 
-        RecipeResponse response = RecipeResponse.builder()
-                .id(createdRecipe.getId())
-                .dishName(createdRecipe.getDishName())
-                .totalTime(createdRecipe.getTotalTime())
-                .recipeSteps(new ArrayList<>())
-                .build();
-
-
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        return new ResponseEntity<>(RecipeMapper.toNewResponse(createdRecipe), HttpStatus.CREATED);
     }
+
+    @DeleteMapping("/{dishName}")
+    public ResponseEntity<RecipeResponse> deleteRecipe(@PathVariable String dishName) {
+        recipeService.deleteRecipe(dishName);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/{dishName}/steps/{stepOrder}")
+    public ResponseEntity<RecipeStepResponse> deleteRecipeStep(@PathVariable Integer stepOrder) {
+        recipeService.deleteRecipeStep(stepOrder);
+        return ResponseEntity.noContent().build();
+    }
+
+
+
+
 
 
 }

@@ -9,7 +9,7 @@ import java.util.List;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Setter
+@Setter // setter 대신 필요한 것들만 따로 메서드 만들어두는게 좋을 듯
 @AllArgsConstructor
 @Builder
 public class Recipe {
@@ -25,5 +25,9 @@ public class Recipe {
 
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<RecipeStep> steps;
+
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<RecipeIngredient> recipeIngredients;
+
 
 }
