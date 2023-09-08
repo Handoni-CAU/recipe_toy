@@ -1,12 +1,13 @@
 package com.oviesAries.recipe.domain.recipe.api;
 
 import com.oviesAries.recipe.domain.entity.Recipe;
-import com.oviesAries.recipe.domain.recipe.dto.RecipeCreateRequest;
-import com.oviesAries.recipe.domain.recipe.dto.RecipeResponse;
+import com.oviesAries.recipe.domain.entity.RecipeIngredient;
+import com.oviesAries.recipe.domain.entity.RecipeStep;
+import com.oviesAries.recipe.domain.recipe.dto.*;
 import com.oviesAries.recipe.domain.recipe.service.RecipeService;
+import com.oviesAries.recipe.domain.utill.RecipeMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,34 +26,75 @@ public class RecipeApiController {
         List<Recipe> recipes = recipeService.getAllRecipes();
 
         List<RecipeResponse> response = recipes.stream()
-                .map(recipe -> new RecipeResponse(recipe.getId(), recipe.getDishName(), recipe.getTotalTime()))
+                .map(RecipeMapper::toRecipeResponse)
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<RecipeResponse> retrieveRecipeById(@PathVariable Long id) {
-        Recipe recipe = recipeService.getRecipeById(id);
+    @GetMapping("/{dishName}")
+    public ResponseEntity<RecipeResponse> retrieveRecipeByName(@PathVariable String dishName) {
+        Recipe recipe = recipeService.getRecipeByDishName(dishName);
 
         if(recipe == null) {
             return ResponseEntity.notFound().build();
         }
 
-        RecipeResponse response = new RecipeResponse(recipe.getId(), recipe.getDishName(), recipe.getTotalTime());
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(RecipeMapper.toRecipeResponse(recipe));
     }
 
+    @GetMapping("/{dishName}/steps/{stepOrder}")
+    public ResponseEntity<RecipeStepResponse> retrieveStepByStepOrder(
+            @PathVariable Integer stepOrder) {
+
+        RecipeStep recipeStep = recipeService.getStepByStepOrder(stepOrder);
+
+        return ResponseEntity.ok(RecipeMapper.toStepResponse(recipeStep));
+    }
+
+
+    @PostMapping("/{dishName}/steps")
+    public ResponseEntity<RecipeStepResponse> createRecipeStep(
+            @PathVariable String dishName,
+            @RequestBody RecipeStepDTO stepDTO) {
+
+        RecipeStep savedStep = recipeService.addStepToRecipe(dishName, RecipeMapper.toStepEntity(stepDTO));
+
+        return new ResponseEntity<>(RecipeMapper.toStepResponse(savedStep), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/{dishName}/ingredients")
+    public ResponseEntity<RecipeIngredientResponse> createRecipeIngredient(
+            @PathVariable String dishName,
+            @RequestBody RecipeIngredientDTO ingredientDTO) {
+
+        RecipeIngredient savedStep = recipeService.addIngredientToRecipe(dishName, RecipeMapper.toIngredientEntity(ingredientDTO));
+
+        return new ResponseEntity<>(RecipeMapper.toIngredientResponse(savedStep), HttpStatus.CREATED);
+    }
 
     @PostMapping("/create")
-    public ResponseEntity<RecipeResponse> createRecipe(@RequestBody RecipeCreateRequest request) {
-        Recipe createdRecipe = recipeService.createRecipe(request.getDishName()); // 필드명 변경
+    public ResponseEntity<RecipeResponse> createRecipe(@RequestBody RecipeCreateDTO request) {
+        Recipe createdRecipe = recipeService.createRecipe(request.getDishName());
 
-        RecipeResponse response = new RecipeResponse(createdRecipe.getId(), createdRecipe.getDishName(), createdRecipe.getTotalTime()); // 필드명 변경
-
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        return new ResponseEntity<>(RecipeMapper.toNewResponse(createdRecipe), HttpStatus.CREATED);
     }
+
+    @DeleteMapping("/{dishName}")
+    public ResponseEntity<RecipeResponse> deleteRecipe(@PathVariable String dishName) {
+        recipeService.deleteRecipe(dishName);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/{dishName}/steps/{stepOrder}")
+    public ResponseEntity<RecipeStepResponse> deleteRecipeStep(@PathVariable Integer stepOrder) {
+        recipeService.deleteRecipeStep(stepOrder);
+        return ResponseEntity.noContent().build();
+    }
+
+
+
+
 
 
 }
