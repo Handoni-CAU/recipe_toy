@@ -52,7 +52,6 @@ public class RecipeApiController {
         return ResponseEntity.ok(RecipeMapper.toStepResponse(recipeStep));
     }
 
-
     @PostMapping("/{dishName}/steps")
     public ResponseEntity<RecipeStepResponse> createRecipeStep(
             @PathVariable String dishName,
@@ -91,10 +90,5 @@ public class RecipeApiController {
         recipeService.deleteRecipeStep(stepOrder);
         return ResponseEntity.noContent().build();
     }
-
-
-
-
-
 
 }

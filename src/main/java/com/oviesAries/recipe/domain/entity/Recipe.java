@@ -20,6 +20,7 @@ public class Recipe {
     private Long id;
 
     private String dishName;
+    private String subtitle;
 
     private Integer totalTime;
 
