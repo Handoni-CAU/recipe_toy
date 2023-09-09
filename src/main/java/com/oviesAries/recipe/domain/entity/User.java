@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.sql.Time;
+
 @Entity
 @Table(name = "USER")
 @Getter
@@ -26,6 +28,10 @@ public class User {
     private String nickName;
 
     private String password;
+
+    private Time created_at;
+
+    private String email;
 
 
     public void updatePassword(String password) {

@@ -43,7 +43,7 @@ class UserControllerTest {
         when(userService.createUser("testUser", "testPassword")).thenReturn(user);
 
         //then
-        mockMvc.perform(post("/api/users/create")
+        mockMvc.perform(post("/api/users")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"user_name\":\"testUser\",\"password\":\"testPassword\"}"))
@@ -64,7 +64,7 @@ class UserControllerTest {
         when(userService.getUserById(1L)).thenReturn(user);
 
         //then
-        mockMvc.perform(get("/api/users/get/user_id/1"))
+        mockMvc.perform(get("/api/users/id/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(jsonPath("$.user_name", is("testUser")))
@@ -86,7 +86,7 @@ class UserControllerTest {
         doNothing().when(userService).deleteUser(1L);
 
         //then
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/users/delete/1")
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/users/1")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"user_name\":\"testUser\",\"password\":\"testPassword\"}"))
