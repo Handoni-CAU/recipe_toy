@@ -27,6 +27,7 @@ public class RecipeMapper {
                         .name(ingredientDTO.getIngredientName())
                         .build())
                 .quantity(ingredientDTO.getQuantity())
+                .recipeIngredientId(ingredientDTO.getRecipeIngredientId())
                 .build();
     }
 
@@ -34,6 +35,7 @@ public class RecipeMapper {
         return RecipeResponse.builder()
                 .id(recipe.getId())
                 .dishName(recipe.getDishName())
+                .subtitle(recipe.getSubtitle())
                 .totalTime(recipe.getTotalTime())
                 .recipeSteps(new ArrayList<>()) // 비어있는 steps로 초기화
                 .recipeIngredients(new ArrayList<>())
@@ -53,8 +55,9 @@ public class RecipeMapper {
         return RecipeIngredientResponse.builder()
                 .id(ingredient.getId())
                 .ingredientName(ingredient.getIngredient().getName())
-                .icon(BlobConverter.blobToString(ingredient.getIngredient().getIcon()))
+                .icon(ingredient.getIngredient().getIcon())
                 .quantity(ingredient.getQuantity())
+                .recipeIngredientId(ingredient.getRecipeIngredientId())
                 .build();
     }
 
@@ -68,12 +71,26 @@ public class RecipeMapper {
                 .collect(Collectors.toList());
     }
 
+    public static List<RecipeIngredientDTO> toIngredientDTOList(List<RecipeIngredient> ingredients) {
+        return ingredients.stream()
+                .map(ingredient -> RecipeIngredientDTO.builder()
+                        .id(ingredient.getId())
+                        .quantity(ingredient.getQuantity())
+                        .recipeIngredientId(ingredient.getRecipeIngredientId())
+                        .ingredientName(ingredient.getIngredient().getName())
+                        .icon(ingredient.getIngredient().getIcon())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
     public static RecipeResponse toRecipeResponse(Recipe recipe) {
         return RecipeResponse.builder()
                 .id(recipe.getId())
                 .dishName(recipe.getDishName())
+                .subtitle(recipe.getSubtitle())
                 .totalTime(recipe.getTotalTime())
                 .recipeSteps(toRecipeStepDTOList(recipe.getSteps()))
+                .recipeIngredients(toIngredientDTOList(recipe.getRecipeIngredients()))
                 .build();
     }
 

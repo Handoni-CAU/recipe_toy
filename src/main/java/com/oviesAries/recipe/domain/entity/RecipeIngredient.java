@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "recipe_ingredients")
+@Table(name = "RECIPE_INGREDIENTS")
 public class RecipeIngredient {
 
     @Id
@@ -28,11 +28,17 @@ public class RecipeIngredient {
 
     private Integer quantity;
 
+    private Integer recipeIngredientId;
+
     public void setRecipe(Recipe recipe) {
         this.recipe = recipe;
     }
 
     public void setIngredient(Ingredient ingredient) {
         this.ingredient = ingredient;
+    }
+
+    public void setRecipeIngredientId(Integer recipeIngredientId) {
+        this.recipeIngredientId = recipeIngredientId;
     }
 }

@@ -9,4 +9,5 @@ import lombok.Data;
 public class RecipeCreateDTO {
 
     private String dishName;
+    private String subtitle;
 }

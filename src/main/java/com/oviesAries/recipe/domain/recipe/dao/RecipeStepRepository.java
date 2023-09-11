@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface RecipeStepRepository extends JpaRepository<RecipeStep, Long> {
-    Optional<RecipeStep> findByStepOrder(Integer stepOrder);
+
+    Optional<RecipeStep> findByRecipeIdAndStepOrder(Long recipeId, Integer stepOrder);
+
 
 }

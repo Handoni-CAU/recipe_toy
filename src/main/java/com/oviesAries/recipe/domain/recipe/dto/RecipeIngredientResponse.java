@@ -17,6 +17,7 @@ public class RecipeIngredientResponse {
     private Long id;
     private String ingredientName;
     private String icon;
-    private int quantity;
+    private Integer quantity;
+    private Integer recipeIngredientId;
 
 }
