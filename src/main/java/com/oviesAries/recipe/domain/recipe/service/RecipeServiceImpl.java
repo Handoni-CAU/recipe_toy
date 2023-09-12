@@ -4,7 +4,7 @@ import com.oviesAries.recipe.domain.entity.Ingredient;
 import com.oviesAries.recipe.domain.entity.Recipe;
 import com.oviesAries.recipe.domain.entity.RecipeIngredient;
 import com.oviesAries.recipe.domain.entity.RecipeStep;
-import com.oviesAries.recipe.domain.recipe.dao.IngredientRepository;
+import com.oviesAries.recipe.domain.dao.IngredientRepository;
 import com.oviesAries.recipe.domain.recipe.dao.RecipeIngredientRepository;
 import com.oviesAries.recipe.domain.recipe.dao.RecipeRepository;
 import com.oviesAries.recipe.domain.recipe.dao.RecipeStepRepository;
@@ -154,7 +154,7 @@ public class RecipeServiceImpl implements RecipeService{
         for (RecipeIngredient ingredient : ingredients) {
             if (ingredient.getRecipeIngredientId() > ingredientOrderToRemove) {
                 ingredient.setRecipeIngredientId(ingredient.getRecipeIngredientId() - 1);
-                recipeIngredientRepository.save(ingredient); // 번호 업데이트를 위해 저장
+                recipeIngredientRepository.save(ingredient);
             }
         }
     }
@@ -182,7 +182,7 @@ public class RecipeServiceImpl implements RecipeService{
         for (RecipeStep step : steps) {
             if (step.getStepOrder() > stepOrderToRemove) {
                 step.setStepOrder(step.getStepOrder() - 1);
-                recipeStepRepository.save(step); // 번호 업데이트를 위해 저장
+                recipeStepRepository.save(step);
             }
         }
     }

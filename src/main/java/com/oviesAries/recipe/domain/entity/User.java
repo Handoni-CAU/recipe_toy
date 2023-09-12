@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.sql.Time;
+import java.util.List;
 
 @Entity
 @Table(name = "USER")
@@ -21,6 +22,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long id;
+
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<UserIngredient> userIngredients;
 
     @Column(nullable = false, length = 20, unique = true)
     private String userName;
@@ -43,6 +47,10 @@ public class User {
 
     public void updateUserName(String userName) {
         this.userName = userName;
+    }
+
+    public void updateUserIngredients(List<UserIngredient> userIngredients) {
+        this.userIngredients = userIngredients;
     }
 
     public void encodePassword(PasswordEncoder passwordEncoder) {

@@ -1,7 +1,7 @@
 package com.oviesAries.recipe.global.config;
 
 import com.oviesAries.recipe.domain.entity.*;
-import com.oviesAries.recipe.domain.recipe.dao.IngredientRepository;
+import com.oviesAries.recipe.domain.dao.IngredientRepository;
 import com.oviesAries.recipe.domain.recipe.dao.RecipeIngredientRepository;
 import com.oviesAries.recipe.domain.recipe.dao.RecipeRepository;
 import com.oviesAries.recipe.domain.recipe.dao.RecipeStepRepository;

@@ -30,9 +30,9 @@ public interface RecipeService {
 
     RecipeIngredient getRecipeIngredientById(Long id);
 
-    void deleteRecipeIngredient(Long recipeId, Integer ingredientOrderToRemove);
-
     RecipeIngredient addIngredientToRecipe(Long id, RecipeIngredient ingredient);
+
+    void deleteRecipeIngredient(Long recipeId, Integer ingredientOrderToRemove);
 
 
 }

@@ -27,7 +27,6 @@ public class RecipeIngredient {
     private Ingredient ingredient;
 
     private Integer quantity;
-
     private Integer recipeIngredientId;
 
     public void setRecipe(Recipe recipe) {
