@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "RECIPE_INGREDIENTS")
 public class RecipeIngredient {
 
     @Id
@@ -19,12 +20,24 @@ public class RecipeIngredient {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recipe_id")
-    private User user;
+    private Recipe recipe;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ingredient_id")
     private Ingredient ingredient;
 
-    private int quantity;
+    private Integer quantity;
+    private Integer recipeIngredientId;
 
+    public void setRecipe(Recipe recipe) {
+        this.recipe = recipe;
+    }
+
+    public void setIngredient(Ingredient ingredient) {
+        this.ingredient = ingredient;
+    }
+
+    public void setRecipeIngredientId(Integer recipeIngredientId) {
+        this.recipeIngredientId = recipeIngredientId;
+    }
 }

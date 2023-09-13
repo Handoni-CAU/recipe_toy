@@ -23,6 +23,13 @@ public class Ingredient {
 
     private String name;
 
-    private Blob icon;
+    private String icon;
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
 }

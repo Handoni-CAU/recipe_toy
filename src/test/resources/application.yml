@@ -1,0 +1,27 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/recipe_test1?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: root
+    password: 1142
+    data: classpath:data.sql
+    initialization-mode: always
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    defer-datasource-initialization: true
+    properties:
+      hibernate:
+        format_sql: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+logging.level:
+  org.hibernate.SQL: debug
+
+jwt:
+  token:
+    secret: "secretKey"

@@ -1,16 +1,14 @@
 package com.oviesAries.recipe.domain.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "RECIPE_STEP")
 public class RecipeStep {
 
     @Id
@@ -20,10 +18,23 @@ public class RecipeStep {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recipe_id")
     private Recipe recipe;
+    private Integer stepOrder;
 
     private String description;
-    // 스텝 설명
-    private String imagePath;
-    // 실제 이미지를 저장하려면 다른 방법 사용 필요.
 
+    private String imagePath;
+
+    @Version
+    private Long version;
+
+    public void setRecipe(Recipe recipe) {
+        this.recipe = recipe;
+        if (!recipe.getSteps().contains(this)) {
+            recipe.getSteps().add(this);
+        }
+    }
+
+    public void setStepOrder(Integer stepOrder) {
+        this.stepOrder = stepOrder;
+    }
 }
