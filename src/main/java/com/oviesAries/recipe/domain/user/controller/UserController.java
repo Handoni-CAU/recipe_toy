@@ -9,6 +9,16 @@ import com.oviesAries.recipe.domain.user.dto.UserCreateRequest;
 import com.oviesAries.recipe.domain.user.dto.UserResponseDto;
 import com.oviesAries.recipe.domain.user.service.UserService;
 import com.oviesAries.recipe.domain.utill.RecipeMapper;
+import com.oviesAries.recipe.domain.entity.User;
+import com.oviesAries.recipe.domain.entity.UserIngredient;
+import com.oviesAries.recipe.domain.recipe.dto.RecipeIngredientDTO;
+import com.oviesAries.recipe.domain.user.dto.UserCreateRequest;
+import com.oviesAries.recipe.domain.user.dto.UserIngredientDTO;
+import com.oviesAries.recipe.domain.user.dto.UserIngredientResponse;
+import com.oviesAries.recipe.domain.user.dto.UserResponseDto;
+import com.oviesAries.recipe.domain.user.service.UserService;
+import com.oviesAries.recipe.domain.utill.RecipeMapper;
+import com.oviesAries.recipe.domain.utill.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,28 +27,31 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
 
-    @PostMapping()
+
+    @PostMapping("/create")
     public ResponseEntity<UserResponseDto> createUser(@RequestBody UserCreateRequest request) {
         User newUser = userService.createUser(request.getUserName(), request.getPassword());
         UserResponseDto response = new UserResponseDto(newUser.getId(), newUser.getUserName(), newUser.getPassword());
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-//    @PostMapping("/{recipeId}/ingredients")
-//    public ResponseEntity<RecipeIngredientResponse> createRecipeIngredient(
-//            @PathVariable Long recipeId,
-//            @RequestBody RecipeIngredientDTO ingredientDTO) {
-//
-//        RecipeIngredient savedStep = recipeService.addIngredientToRecipe(recipeId, RecipeMapper.toIngredientEntity(ingredientDTO));
-//
-//        return new ResponseEntity<>(RecipeMapper.toIngredientResponse(savedStep), HttpStatus.CREATED);
-//    }
+
+    @PostMapping("/{userId}/ingredients")
+    public ResponseEntity<UserIngredientResponse> createRecipeIngredient(
+            @PathVariable Long userId,
+            @RequestBody UserIngredientDTO ingredientDTO) {
+
+        UserIngredient savedStep = userService.addIngredientToUser(userId, UserMapper.toIngredientEntity(ingredientDTO));
+
+        return new ResponseEntity<>(UserMapper.toIngredientResponse(savedStep), HttpStatus.CREATED);
+    }
 
     @GetMapping("username/{userName}")
     public ResponseEntity<UserResponseDto> getUserByUserName(@PathVariable String userName) {
@@ -50,18 +63,19 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-//    @GetMapping("/{recipeId}/ingredients")
-//    public ResponseEntity<List<RecipeIngredientResponse>> getAllIngredient(
-//            @PathVariable Long recipeId) {
-//
-//        List<RecipeIngredient> recipeIngredients = recipeService.getAllRecipeIngredient(recipeId);
-//
-//        List<RecipeIngredientResponse> response = recipeIngredients.stream()
-//                .map(RecipeMapper::toIngredientResponse)
-//                .collect(Collectors.toList());
-//
-//        return ResponseEntity.ok(response);
-//    }
+
+    @GetMapping("/{userId}/ingredients")
+    public ResponseEntity<List<UserIngredientResponse>> getAllIngredient(
+            @PathVariable Long userId) {
+
+        List<UserIngredient> recipeIngredients = userService.getAllUserIngredient(userId);
+
+        List<UserIngredientResponse> response = recipeIngredients.stream()
+                .map(UserMapper::toIngredientResponse)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(response);
+    }
 
     @GetMapping("id/{id}")
     public ResponseEntity<UserResponseDto> getUserById(@PathVariable Long id) {
@@ -79,12 +93,14 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-//    @DeleteMapping("/{recipeId}/ingredients/{recipeIngredientId}")
-//    public ResponseEntity<RecipeStepResponse> deleteIngredient(
-//            @PathVariable Long recipeId,
-//            @PathVariable Integer recipeIngredientId) {
-//        recipeService.deleteRecipeIngredient(recipeId, recipeIngredientId);
-//        return ResponseEntity.noContent().build();
-//    }
+
+    @DeleteMapping("/{userId}/ingredients/{recipeIngredientId}")
+    public ResponseEntity<UserIngredientResponse> deleteIngredient(
+            @PathVariable Long userId,
+            @PathVariable Integer recipeIngredientId) {
+        userService.deleteUserIngredient(userId, recipeIngredientId);
+        return ResponseEntity.noContent().build();
+    }
+
 
 }

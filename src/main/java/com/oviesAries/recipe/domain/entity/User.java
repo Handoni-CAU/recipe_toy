@@ -23,7 +23,7 @@ public class User {
     @Column(name = "user_id")
     private Long id;
 
-    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<UserIngredient> userIngredients;
 
     @Column(nullable = false, length = 20, unique = true)
@@ -33,7 +33,9 @@ public class User {
 
     private String password;
 
+
     private Time created_at;
+    
 
     private String email;
 
