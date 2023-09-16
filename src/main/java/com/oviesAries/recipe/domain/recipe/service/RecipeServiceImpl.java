@@ -4,20 +4,19 @@ import com.oviesAries.recipe.domain.entity.Ingredient;
 import com.oviesAries.recipe.domain.entity.Recipe;
 import com.oviesAries.recipe.domain.entity.RecipeIngredient;
 import com.oviesAries.recipe.domain.entity.RecipeStep;
-import com.oviesAries.recipe.domain.recipe.dao.IngredientRepository;
+import com.oviesAries.recipe.domain.dao.IngredientRepository;
 import com.oviesAries.recipe.domain.recipe.dao.RecipeIngredientRepository;
 import com.oviesAries.recipe.domain.recipe.dao.RecipeRepository;
 import com.oviesAries.recipe.domain.recipe.dao.RecipeStepRepository;
+import com.oviesAries.recipe.domain.recipe.dto.request.RecipeCreateDTO;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +26,6 @@ public class RecipeServiceImpl implements RecipeService{
     private final RecipeRepository recipeRepository;
     private final RecipeStepRepository recipeStepRepository;
     private final RecipeIngredientRepository recipeIngredientRepository;
-
     private final IngredientRepository ingredientRepository;
 
     @Override
@@ -37,9 +35,10 @@ public class RecipeServiceImpl implements RecipeService{
 
     @Override
     @Transactional
-    public Recipe createRecipe(String recipeName) {
+    public Recipe createRecipe(RecipeCreateDTO createDTO) {
         Recipe recipe = Recipe.builder()
-                .dishName(recipeName)
+                .dishName(createDTO.getDishName())
+                .subtitle(createDTO.getSubtitle())
                 .recipeSteps(new ArrayList<>())
                 .build();
 
@@ -49,36 +48,44 @@ public class RecipeServiceImpl implements RecipeService{
     }
 
     @Override
-    public RecipeStep addStepToRecipe(String dishName, RecipeStep step) {
-        Recipe recipe = recipeRepository.findByDishName(dishName)
-                .orElseThrow(() -> new NoSuchElementException("Recipe with dish name: " + dishName + " does not exist."));
+    public RecipeStep addStepToRecipe(Long id, RecipeStep step) {
+        try {
+            Recipe recipe = recipeRepository.findById(id)
+                    .orElseThrow(() -> new NoSuchElementException("Recipe with dish name: " + id + " does not exist."));
 
-        int currentStepCount = recipe.getRecipeSteps().size();
-        step.setStepOrder(currentStepCount + 1);
+            int currentStepCount = recipe.getRecipeSteps().size();
+            step.setStepOrder(currentStepCount + 1);
 
-        step.setRecipe(recipe);
+            step.setRecipe(recipe);
 
-        if (recipe.getRecipeSteps() == null) {
-            recipe.setRecipeSteps(new ArrayList<>());
+            if (recipe.getRecipeSteps() == null) {
+                recipe.setRecipeSteps(new ArrayList<>());
+            }
+
+            recipe.getRecipeSteps().add(step);
+            return recipeStepRepository.save(step);
+        } catch (OptimisticLockingFailureException ex) {
+            throw new ConcurrentModificationException("사용자가 변경 중", ex);
         }
-
-        recipe.getRecipeSteps().add(step);
-        return recipeStepRepository.save(step);
     }
 
+
     @Override
-    public RecipeIngredient addIngredientToRecipe(String dishName, RecipeIngredient recipeIngredient) {
-        Recipe recipe = recipeRepository.findByDishName(dishName)
-                .orElseThrow(() -> new NoSuchElementException("Recipe with dish name: " + dishName + " does not exist."));
+    public RecipeIngredient addIngredientToRecipe(Long id, RecipeIngredient recipeIngredient) {
+        Recipe recipe = recipeRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Recipe with dish name: " + id + " does not exist."));
 
         Ingredient ingredient = Ingredient.builder()
                 .name(recipeIngredient.getIngredient().getName())
                 .icon(recipeIngredient.getIngredient().getIcon())
                 .build();
 
-        Ingredient savedIngredient = ingredientRepository.save(ingredient); // 저장된 Ingredient 인스턴스를 반환받습니다.
+        int currentSequenceCount = recipe.getRecipeIngredients().size();
+        recipeIngredient.setRecipeIngredientId(currentSequenceCount + 1);
 
-        recipeIngredient.setIngredient(savedIngredient); // 영속 상태의 Ingredient 인스턴스를 설정해줍니다.
+        Ingredient savedIngredient = ingredientRepository.save(ingredient);
+
+        recipeIngredient.setIngredient(savedIngredient);
         recipeIngredient.setRecipe(recipe);
 
         if (recipe.getRecipeIngredients() == null) {
@@ -101,25 +108,83 @@ public class RecipeServiceImpl implements RecipeService{
     }
 
     @Override
-    public RecipeStep getStepByStepOrder(Integer stepOrder) {
-        return recipeStepRepository.findByStepOrder(stepOrder).orElse(null);
+    public RecipeStep getStepByRecipeIdAndStepOrder(Long recipeId, Integer stepOrder) {
+        return recipeStepRepository.findByRecipeIdAndStepOrder(recipeId, stepOrder)
+                .orElseThrow(() -> new EntityNotFoundException("Recipe step not found"));
     }
 
     @Override
-    public void deleteRecipe(String dishName) {
-        Optional<Recipe> stepOptional = recipeRepository.findByDishName(dishName);
-        if (!stepOptional.isPresent()) {
-            throw new EntityNotFoundException("Recipe with ID " + stepOptional + " not found.");
-        }
-        recipeRepository.delete(stepOptional.get());
+    public List<RecipeIngredient> getAllRecipeIngredient(Long id) {
+        return recipeIngredientRepository.findByRecipeId(id);
+    }
+
+
+    @Override
+    public RecipeIngredient getRecipeIngredientById(Long id) {
+        return recipeIngredientRepository.findById(id).orElse(null);
     }
 
     @Override
-    public void deleteRecipeStep(Integer stepOrder) {
-        Optional<RecipeStep> stepOptional = recipeStepRepository.findByStepOrder(stepOrder);
-        if (!stepOptional.isPresent()) {
-            throw new EntityNotFoundException("RecipeStep with ID " + stepOptional + " not found.");
+    public void deleteRecipe(Long id) {
+        Optional<Recipe> recipeOptional = recipeRepository.findById(id);
+        if (!recipeOptional.isPresent()) {
+            throw new EntityNotFoundException("Recipe with ID " + recipeOptional + " not found.");
         }
-        recipeStepRepository.delete(stepOptional.get());
+        recipeRepository.delete(recipeOptional.get());
     }
+    @Override
+    public void deleteRecipeIngredient(Long recipeId, Integer ingredientOrderToRemove) {
+        Recipe recipe = recipeRepository.findById(recipeId)
+                .orElseThrow(() -> new NoSuchElementException("Recipe with ID: " + recipeId + " does not exist."));
+
+        List<RecipeIngredient> ingredients = recipe.getRecipeIngredients();
+
+        RecipeIngredient ingredientToRemove = null;
+        for (RecipeIngredient ingredient : ingredients) {
+            if (ingredient.getRecipeIngredientId().equals(ingredientOrderToRemove)) {
+                ingredientToRemove = ingredient;
+                break;
+            }
+        }
+        if (ingredientToRemove != null) {
+            ingredients.remove(ingredientToRemove);
+            recipeIngredientRepository.delete(ingredientToRemove);
+        }
+
+        for (RecipeIngredient ingredient : ingredients) {
+            if (ingredient.getRecipeIngredientId() > ingredientOrderToRemove) {
+                ingredient.setRecipeIngredientId(ingredient.getRecipeIngredientId() - 1);
+                recipeIngredientRepository.save(ingredient);
+            }
+        }
+    }
+
+
+    @Override
+    public void deleteRecipeStep(Long recipeId, Integer stepOrderToRemove) {
+        Recipe recipe = recipeRepository.findById(recipeId)
+                .orElseThrow(() -> new NoSuchElementException("Recipe with ID: " + recipeId + " does not exist."));
+
+        List<RecipeStep> steps = recipe.getRecipeSteps();
+
+        RecipeStep stepToRemove = null;
+        for (RecipeStep step : steps) {
+            if (step.getStepOrder().equals(stepOrderToRemove)) {
+                stepToRemove = step;
+                break;
+            }
+        }
+        if (stepToRemove != null) {
+            steps.remove(stepToRemove);
+            recipeStepRepository.delete(stepToRemove);
+        }
+
+        for (RecipeStep step : steps) {
+            if (step.getStepOrder() > stepOrderToRemove) {
+                step.setStepOrder(step.getStepOrder() - 1);
+                recipeStepRepository.save(step);
+            }
+        }
+    }
+
 }

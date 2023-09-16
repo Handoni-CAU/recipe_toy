@@ -1,16 +1,13 @@
-package com.oviesAries.recipe.domain.user.dto;
+package com.oviesAries.recipe.domain.recipe.dto.request;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
-@AllArgsConstructor
-public class UserResponseDto {
-    private Long id;
-    private String userName;
-    private String password;
+public class RecipeCreateDTO {
 
+    private String dishName;
+    private String subtitle;
 }

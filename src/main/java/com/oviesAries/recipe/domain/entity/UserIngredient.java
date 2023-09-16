@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "user_ingredients")
+@Table(name = "USER_INGREDIENTS")
 public class UserIngredient {
 
     @Id
@@ -26,7 +26,19 @@ public class UserIngredient {
     @JoinColumn(name = "ingredient_id")
     private Ingredient ingredient;
 
-    private int quantity;
+    private Integer quantity;
 
+    private Integer userIngredientId;
 
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setIngredient(Ingredient ingredient) {
+        this.ingredient = ingredient;
+    }
+
+    public void setUserIngredientId(Integer userIngredientId) {
+        this.userIngredientId = userIngredientId;
+    }
 }
