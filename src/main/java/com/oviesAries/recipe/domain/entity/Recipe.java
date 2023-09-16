@@ -3,6 +3,7 @@ package com.oviesAries.recipe.domain.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Table(name = "RECIPE")
@@ -20,6 +21,7 @@ public class Recipe {
     private Long id;
 
     private String dishName;
+
     private String subtitle;
 
     private Integer totalTime;

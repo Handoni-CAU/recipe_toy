@@ -4,7 +4,11 @@ import com.oviesAries.recipe.domain.entity.Ingredient;
 import com.oviesAries.recipe.domain.entity.Recipe;
 import com.oviesAries.recipe.domain.entity.RecipeIngredient;
 import com.oviesAries.recipe.domain.entity.RecipeStep;
-import com.oviesAries.recipe.domain.recipe.dto.*;
+import com.oviesAries.recipe.domain.recipe.dto.request.RecipeIngredientDTO;
+import com.oviesAries.recipe.domain.recipe.dto.request.RecipeStepDTO;
+import com.oviesAries.recipe.domain.recipe.dto.response.RecipeIngredientResponse;
+import com.oviesAries.recipe.domain.recipe.dto.response.RecipeResponse;
+import com.oviesAries.recipe.domain.recipe.dto.response.RecipeStepResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +31,7 @@ public class RecipeMapper {
                         .name(ingredientDTO.getIngredientName())
                         .build())
                 .quantity(ingredientDTO.getQuantity())
+                .recipeIngredientId(ingredientDTO.getRecipeIngredientId())
                 .build();
     }
 
@@ -34,6 +39,7 @@ public class RecipeMapper {
         return RecipeResponse.builder()
                 .id(recipe.getId())
                 .dishName(recipe.getDishName())
+                .subtitle(recipe.getSubtitle())
                 .totalTime(recipe.getTotalTime())
                 .recipeSteps(new ArrayList<>()) // 비어있는 steps로 초기화
                 .recipeIngredients(new ArrayList<>())
@@ -53,8 +59,9 @@ public class RecipeMapper {
         return RecipeIngredientResponse.builder()
                 .id(ingredient.getId())
                 .ingredientName(ingredient.getIngredient().getName())
-                .icon(BlobConverter.blobToString(ingredient.getIngredient().getIcon()))
+                .icon(ingredient.getIngredient().getIcon())
                 .quantity(ingredient.getQuantity())
+                .recipeIngredientId(ingredient.getRecipeIngredientId())
                 .build();
     }
 
@@ -68,12 +75,26 @@ public class RecipeMapper {
                 .collect(Collectors.toList());
     }
 
+    public static List<RecipeIngredientDTO> toIngredientDTOList(List<RecipeIngredient> ingredients) {
+        return ingredients.stream()
+                .map(ingredient -> RecipeIngredientDTO.builder()
+                        .id(ingredient.getId())
+                        .quantity(ingredient.getQuantity())
+                        .recipeIngredientId(ingredient.getRecipeIngredientId())
+                        .ingredientName(ingredient.getIngredient().getName())
+                        .icon(ingredient.getIngredient().getIcon())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
     public static RecipeResponse toRecipeResponse(Recipe recipe) {
         return RecipeResponse.builder()
                 .id(recipe.getId())
                 .dishName(recipe.getDishName())
+                .subtitle(recipe.getSubtitle())
                 .totalTime(recipe.getTotalTime())
                 .recipeSteps(toRecipeStepDTOList(recipe.getSteps()))
+                .recipeIngredients(toIngredientDTOList(recipe.getRecipeIngredients()))
                 .build();
     }
 

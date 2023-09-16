@@ -1,16 +1,13 @@
-package com.oviesAries.recipe.domain.recipe.dto;
+package com.oviesAries.recipe.domain.recipe.dto.request;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.oviesAries.recipe.domain.entity.RecipeIngredient;
-import com.oviesAries.recipe.domain.utill.BlobConverter;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Blob;
-import java.util.Base64;
 
 @Data
 @Builder
@@ -19,16 +16,20 @@ import java.util.Base64;
 @NoArgsConstructor
 public class RecipeIngredientDTO {
 
+    private Long id;
     private String ingredientName;
     private String icon;
-    private int quantity;
+    private Integer quantity;
+    private Integer recipeIngredientId;
 
     public static RecipeIngredientDTO fromEntity(RecipeIngredient recipeIngredient) {
         RecipeIngredientDTO dto = new RecipeIngredientDTO();
 
+        dto.setId(recipeIngredient.getId());
         dto.setIngredientName(recipeIngredient.getIngredient().getName());
-        dto.setIcon(BlobConverter.blobToString(recipeIngredient.getIngredient().getIcon()));
+        dto.setIcon(recipeIngredient.getIngredient().getIcon());
         dto.setQuantity(recipeIngredient.getQuantity());
+        dto.setRecipeIngredientId(recipeIngredient.getRecipeIngredientId());
 
         return dto;
     }

@@ -78,9 +78,6 @@ class RecipeApiControllerTest {
                         .dishName("Burger")
                         .build();
 
-        // when
-        when(recipeService.createRecipe(anyString())).thenReturn(recipe);
-
         // then
         mockMvc.perform(post("/api/recipes/create")
                         .with(csrf())

@@ -1,4 +1,4 @@
-package com.oviesAries.recipe.domain.recipe.dto;
+package com.oviesAries.recipe.domain.recipe.dto.response;
 
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -6,8 +6,6 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-
-import java.util.List;
 
 @Data
 @Builder

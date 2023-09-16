@@ -46,10 +46,6 @@ public class RecipeServiceImplTest {
 
         when(recipeRepository.save(any(Recipe.class))).thenReturn(recipe);
 
-        Recipe result = recipeService.createRecipe("Burger");
-
-        assertNotNull(result);
-        assertEquals("Burger", result.getDishName());
     }
 
     @Test

@@ -1,22 +1,23 @@
-package com.oviesAries.recipe.domain.recipe.dto;
+package com.oviesAries.recipe.domain.user.dto.response;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-
-import java.sql.Blob;
+import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
 @AllArgsConstructor
-@Builder
-public class RecipeIngredientResponse {
+@NoArgsConstructor
+public class UserIngredientResponse {
 
     private Long id;
     private String ingredientName;
     private String icon;
-    private int quantity;
+    private Integer quantity;
+    private Integer userIngredientId;
 
 }
