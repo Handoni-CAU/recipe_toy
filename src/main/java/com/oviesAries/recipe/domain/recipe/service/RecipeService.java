@@ -3,7 +3,7 @@ package com.oviesAries.recipe.domain.recipe.service;
 import com.oviesAries.recipe.domain.entity.Recipe;
 import com.oviesAries.recipe.domain.entity.RecipeIngredient;
 import com.oviesAries.recipe.domain.entity.RecipeStep;
-import com.oviesAries.recipe.domain.recipe.dto.RecipeCreateDTO;
+import com.oviesAries.recipe.domain.recipe.dto.request.RecipeCreateDTO;
 
 
 import java.util.List;

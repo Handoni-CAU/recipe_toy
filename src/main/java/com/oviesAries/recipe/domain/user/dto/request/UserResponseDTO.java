@@ -1,21 +1,16 @@
-package com.oviesAries.recipe.domain.recipe.dto;
-
+package com.oviesAries.recipe.domain.user.dto.request;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 
 @Data
-@Builder
 @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
 @AllArgsConstructor
-public class RecipeStepResponse {
-
+public class UserResponseDTO {
     private Long id;
-    private Integer stepOrder;
-    private String description;
-    private String imagePath;
+    private String userName;
+    private String password;
 
 }

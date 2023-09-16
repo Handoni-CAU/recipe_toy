@@ -1,12 +1,9 @@
 package com.oviesAries.recipe.domain.utill;
 
 import com.oviesAries.recipe.domain.entity.Ingredient;
-import com.oviesAries.recipe.domain.entity.RecipeIngredient;
 import com.oviesAries.recipe.domain.entity.UserIngredient;
-import com.oviesAries.recipe.domain.recipe.dto.RecipeIngredientDTO;
-import com.oviesAries.recipe.domain.recipe.dto.RecipeIngredientResponse;
-import com.oviesAries.recipe.domain.user.dto.UserIngredientDTO;
-import com.oviesAries.recipe.domain.user.dto.UserIngredientResponse;
+import com.oviesAries.recipe.domain.user.dto.request.UserIngredientDTO;
+import com.oviesAries.recipe.domain.user.dto.response.UserIngredientResponse;
 
 public class UserMapper {
 

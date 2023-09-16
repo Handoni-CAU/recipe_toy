@@ -31,6 +31,13 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
+
+	// Bean Validation API
+	implementation 'javax.validation:validation-api:2.0.1.Final'
+
+	// Hibernate Validator (Bean Validation 구현체)
+	implementation 'org.hibernate.validator:hibernate-validator:6.0.17.Final'
+
 }
 
 tasks.named('test') {

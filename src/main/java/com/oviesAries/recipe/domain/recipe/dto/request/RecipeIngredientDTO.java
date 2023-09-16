@@ -1,4 +1,4 @@
-package com.oviesAries.recipe.domain.recipe.dto;
+package com.oviesAries.recipe.domain.recipe.dto.request;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;

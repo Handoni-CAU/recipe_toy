@@ -8,7 +8,7 @@ import com.oviesAries.recipe.domain.dao.IngredientRepository;
 import com.oviesAries.recipe.domain.recipe.dao.RecipeIngredientRepository;
 import com.oviesAries.recipe.domain.recipe.dao.RecipeRepository;
 import com.oviesAries.recipe.domain.recipe.dao.RecipeStepRepository;
-import com.oviesAries.recipe.domain.recipe.dto.RecipeCreateDTO;
+import com.oviesAries.recipe.domain.recipe.dto.request.RecipeCreateDTO;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
