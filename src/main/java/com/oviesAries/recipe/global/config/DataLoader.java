@@ -6,6 +6,8 @@ import com.oviesAries.recipe.domain.recipe.dao.RecipeIngredientRepository;
 import com.oviesAries.recipe.domain.recipe.dao.RecipeRepository;
 import com.oviesAries.recipe.domain.recipe.dao.RecipeStepRepository;
 import com.oviesAries.recipe.domain.user.dao.UserRepository;
+import com.oviesAries.recipe.domain.user.domain.Email;
+import com.oviesAries.recipe.domain.user.domain.EncodedPassword;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,15 +29,15 @@ public class DataLoader {
             // Users
             User user1 = User.builder().
                     userName("이상윤").
-                    password("password1").
+                    encodedPassword(EncodedPassword.from("1234")).
                     nickName("한도니").
-                    email("email1@email.com").
+                    email(Email.from("email1@email.com")).
                     build();
             User user2 = User.builder().
                     userName("최원준").
-                    password("password2").
+                    encodedPassword(EncodedPassword.from("1234")).
                     nickName("황새치").
-                    email("email2@email.com").
+                    email(Email.from("email2@email.com")).
                     build();
 
             userRepository.save(user1);

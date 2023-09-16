@@ -38,6 +38,13 @@ dependencies {
 	// Hibernate Validator (Bean Validation 구현체)
 	implementation 'org.hibernate.validator:hibernate-validator:6.0.17.Final'
 
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+
+	implementation 'javax.xml.bind:jaxb-api:2.3.1'
+	implementation 'org.glassfish.jaxb:jaxb-runtime:2.3.1'
+
+
+
 }
 
 tasks.named('test') {

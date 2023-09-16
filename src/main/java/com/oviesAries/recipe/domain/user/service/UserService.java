@@ -2,11 +2,12 @@ package com.oviesAries.recipe.domain.user.service;
 
 import com.oviesAries.recipe.domain.entity.User;
 import com.oviesAries.recipe.domain.entity.UserIngredient;
+import com.oviesAries.recipe.domain.user.domain.EncodedPassword;
 
 import java.util.List;
 
 public interface UserService {
-    User createUser(String userName, String password);
+    User createUser(String username, EncodedPassword password);
 
     User getUserByUserName(String userName);
 

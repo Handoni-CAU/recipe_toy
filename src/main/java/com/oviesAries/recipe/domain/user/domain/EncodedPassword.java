@@ -1,9 +1,11 @@
 package com.oviesAries.recipe.domain.user.domain;
 
 import com.oviesAries.recipe.domain.user.security.PasswordEncoder;
+import lombok.Getter;
 
 import java.util.Objects;
 
+@Getter
 public class EncodedPassword {
 
 

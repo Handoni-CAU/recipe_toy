@@ -1,10 +1,16 @@
 package com.oviesAries.recipe.domain.user.application;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oviesAries.recipe.domain.entity.User;
 import com.oviesAries.recipe.domain.user.dao.UserRepository;
+import com.oviesAries.recipe.domain.user.domain.AuthPrincipal;
+import com.oviesAries.recipe.domain.user.domain.Email;
 import com.oviesAries.recipe.domain.user.domain.EncodedPassword;
+import com.oviesAries.recipe.domain.user.dto.request.LoginRequest;
 import com.oviesAries.recipe.domain.user.dto.request.SignUpRequest;
+import com.oviesAries.recipe.domain.user.dto.response.LoginResponse;
+import com.oviesAries.recipe.domain.user.exception.LoginFailException;
 import com.oviesAries.recipe.domain.user.infra.TokenProvider;
 import com.oviesAries.recipe.domain.user.security.PasswordEncoder;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +39,30 @@ public class AuthService {
         );
 
         return userRepository.save(member).getId();
+    }
+
+    @Transactional(readOnly = true)
+    public LoginResponse loginMember(final LoginRequest loginRequest) {
+        User user = getMemberByEmail(loginRequest.getEmail());
+        user.validatePassword(loginRequest.getPassword(), passwordEncoder);
+        AuthPrincipal authPrincipal = AuthPrincipal.from(user);
+
+        String accessToken = tokenProvider.createToken(principalToJson(authPrincipal));
+        return LoginResponse.of(accessToken, user.getNickName(), user.getEmail());
+    }
+
+    private String principalToJson(final AuthPrincipal authPrincipal) {
+        try {
+            return objectMapper.writeValueAsString(authPrincipal);
+        } catch (JsonProcessingException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+
+    private User getMemberByEmail(final String email) {
+        return userRepository.findByEmail(Email.from(email))
+                .orElseThrow(LoginFailException::new);
     }
 
 

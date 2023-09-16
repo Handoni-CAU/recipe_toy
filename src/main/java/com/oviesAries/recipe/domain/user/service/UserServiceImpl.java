@@ -5,6 +5,7 @@ import com.oviesAries.recipe.domain.entity.*;
 import com.oviesAries.recipe.domain.recipe.dao.RecipeRepository;
 import com.oviesAries.recipe.domain.user.dao.UserIngredientRepository;
 import com.oviesAries.recipe.domain.user.dao.UserRepository;
+import com.oviesAries.recipe.domain.user.domain.EncodedPassword;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,10 +24,10 @@ public class UserServiceImpl implements UserService {
     private final IngredientRepository ingredientRepository;
     private final PasswordEncoder passwordEncoder;
     @Override
-    public User createUser(String username, String password) {
+    public User createUser(String username, EncodedPassword password) {
         User user = User.builder()
                 .userName(username)
-                .password(passwordEncoder.encode(password))
+                .encodedPassword(password)
                 .build();
 
         return userRepository.save(user);

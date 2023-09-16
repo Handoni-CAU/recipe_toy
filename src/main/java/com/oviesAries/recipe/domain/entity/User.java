@@ -1,12 +1,16 @@
 package com.oviesAries.recipe.domain.entity;
 
+import com.oviesAries.recipe.domain.user.domain.Email;
 import com.oviesAries.recipe.domain.user.domain.EncodedPassword;
+import com.oviesAries.recipe.domain.user.domain.converter.EmailConverter;
+import com.oviesAries.recipe.domain.user.domain.converter.PasswordConverter;
+import com.oviesAries.recipe.domain.user.exception.LoginFailException;
+import com.oviesAries.recipe.domain.user.security.PasswordEncoder;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.sql.Time;
 import java.util.List;
@@ -33,16 +37,21 @@ public class User {
     private String nickName;
 
     @Column(name = "password", nullable = false)
+    @Convert(converter = PasswordConverter.class)
     private EncodedPassword encodedPassword;
+
     private Time created_at;
-    private String email;
+
+    @Column(name = "email", nullable = false, unique = true)
+    @Convert(converter = EmailConverter.class)
+    private Email email;
 
     @Builder
     private User(
             String userName,
             String nickName,
             final EncodedPassword encodedPassword,
-            String email
+            Email email
     ) {
         this.userName = userName;
         this.nickName = nickName;
@@ -57,15 +66,13 @@ public class User {
             final EncodedPassword encodedPassword,
             String email
     ) {
-        return new User(userName, nickName, encodedPassword, email);
+        return new User(userName, nickName, encodedPassword, Email.from(email));
     }
 
-    public void updateNickName(String nickName) {
-        this.nickName = nickName;
-    }
-
-    public void updateUserName(String userName) {
-        this.userName = userName;
+    public void validatePassword(final String password, final PasswordEncoder passwordEncoder) {
+        if (!encodedPassword.isMatch(password, passwordEncoder)) {
+            throw new LoginFailException();
+        }
     }
 
     public void updateUserIngredients(List<UserIngredient> userIngredients) {
