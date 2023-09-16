@@ -54,21 +54,21 @@ class RecipeApiControllerTest {
                 .andExpect(jsonPath("$[0].dish_name", is("Pizza")))
                 .andExpect(jsonPath("$[1].dish_name", is("Pasta")));
     }
-
-    @Test
-    public void retrieveRecipeById() throws Exception {
-        // given
-        Recipe recipe = Recipe.builder().dishName("Tacos").id(1L).build();
-
-        // when
-        when(recipeService.getRecipeById(1L)).thenReturn(recipe);
-
-        // then
-        mockMvc.perform(get("/api/recipes/1"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.dish_name", is("Tacos")))
-                .andExpect(jsonPath("$.id", is(1)));
-    }
+// 이런거 없는디?
+//    @Test
+//    public void retrieveRecipeById() throws Exception {
+//        // given
+//        Recipe recipe = Recipe.builder().dishName("Tacos").id(1L).build();
+//
+//        // when
+//        when(recipeService.getRecipeById(1L)).thenReturn(recipe);
+//
+//        // then
+//        mockMvc.perform(get("/api/recipes/1"))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.dish_name", is("Tacos")))
+//                .andExpect(jsonPath("$.id", is(1)));
+//    }
 
     @Test
     public void createRecipe() throws Exception {

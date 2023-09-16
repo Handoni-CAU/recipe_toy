@@ -59,6 +59,9 @@ public class RecipeMapper {
     }
 
     public static List<RecipeStepDTO> toRecipeStepDTOList(List<RecipeStep> steps) {
+        if (steps == null) {
+            return new ArrayList<>();
+        }
         return steps.stream()
                 .map(step -> RecipeStepDTO.builder()
                         .stepOrder(step.getStepOrder())
@@ -73,7 +76,7 @@ public class RecipeMapper {
                 .id(recipe.getId())
                 .dishName(recipe.getDishName())
                 .totalTime(recipe.getTotalTime())
-                .recipeSteps(toRecipeStepDTOList(recipe.getSteps()))
+                .recipeSteps(toRecipeStepDTOList(recipe.getRecipeSteps()))
                 .build();
     }
 

@@ -67,7 +67,7 @@ public class DataLoader {
             RecipeStep step4 = new RecipeStep(null, kimchiStew, 4, "두부를 추가하여 끓인다.", null);
 
             List<RecipeStep> steps = new ArrayList<>(Arrays.asList(step1, step2, step3, step4));
-            kimchiStew.setSteps(steps);
+            kimchiStew.setRecipeSteps(steps);
 
             recipeStepRepository.save(step1);
             recipeStepRepository.save(step2);

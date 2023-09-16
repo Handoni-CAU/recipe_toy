@@ -65,7 +65,7 @@ class UserServiceImplTest {
         doNothing().when(userRepository).deleteById(1L);
 
         //when
-        userService.deleteUser(1L);
+        userService.deleteUserById(1L);
 
         //then
         verify(userRepository, times(1)).deleteById(1L);

@@ -1,0 +1,26 @@
+= Recipe App Api
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs // 문서에 표기되는 코드들의 하이라이팅을 highlightjs를 사용
+:toc: left // toc (Table Of Contents)를 문서의 좌측에 두기
+:toclevels: 2
+:sectlinks:
+
+== 회원
+=== 회원 생성
+==== Request
+include::{snippets}/users/createUser/http-request.adoc[]
+==== Response
+include::{snippets}/users/createUser/http-response.adoc[]
+
+=== Id로 회원 가져오기
+==== Request
+include::{snippets}/users/getUserById/http-request.adoc[]
+==== Response
+include::{snippets}/users/getUserById/http-response.adoc[]
+
+=== 회원 삭제
+==== Request
+include::{snippets}/users/deleteUser/http-request.adoc[]
+==== Response
+include::{snippets}/users/deleteUser/http-response.adoc[]

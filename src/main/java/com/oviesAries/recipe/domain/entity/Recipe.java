@@ -25,7 +25,7 @@ public class Recipe {
     private Integer totalTime;
 
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<RecipeStep> steps;
+    private List<RecipeStep> recipeSteps;
 
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<RecipeIngredient> recipeIngredients;

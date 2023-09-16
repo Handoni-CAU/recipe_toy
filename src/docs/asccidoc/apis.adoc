@@ -1,5 +1,0 @@
-== 회원 생성
-=== Request
-include::{snippets}/users/createUser/http-request.adoc
-=== Response
-include::{snippets}/users/createUser/http-response.adoc

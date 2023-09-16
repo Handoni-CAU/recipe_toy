@@ -2,6 +2,7 @@ package com.oviesAries.recipe.domain.user.controller;
 
 import com.oviesAries.recipe.domain.entity.User;
 import com.oviesAries.recipe.domain.user.service.UserService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,13 +38,19 @@ class UserControllerTest {
     @MockBean
     private UserService userService;
 
+    private User user;
+    @BeforeEach
+    void setUp() {
+        user = User.builder()
+                .id(1L)
+                .userName("testUserName")
+                .password("testPassword")
+                .build();
+    }
+
     @Test
     void 생성() throws Exception {
         //given
-        User user = User.builder()
-                .userName("testUser")
-                .password("testPassword")
-                .build();
 
         //when
         when(userService.createUser("testUser", "testPassword")).thenReturn(user);
@@ -58,26 +65,24 @@ class UserControllerTest {
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint())))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.user_name", is("testUser")))
+                .andExpect(jsonPath("$.user_name", is("testUserName")))
                 .andExpect(jsonPath("$.password", is("testPassword")));
     }
 
     @Test
     void id로_가져오기() throws Exception{
         //given
-        User user = User.builder()
-                .id(1L)
-                .userName("testUser")
-                .password("testPassword")
-                .build();
         //when
         when(userService.getUserById(1L)).thenReturn(user);
 
         //then
         mockMvc.perform(get("/api/users/id/1"))
+                .andDo(document("users/getUserById",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.user_name", is("testUser")))
+                .andExpect(jsonPath("$.user_name", is("testUserName")))
                 .andExpect(jsonPath("$.password", is("testPassword")));
 
 
@@ -93,13 +98,16 @@ class UserControllerTest {
                 .password("testPassword")
                 .build();
         //when
-        doNothing().when(userService).deleteUser(1L);
+        doNothing().when(userService).deleteUserById(1L);
 
         //then
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/users/1")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"user_name\":\"testUser\",\"password\":\"testPassword\"}"))
+                .andDo(document("users/deleteUserById",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())))
                 .andExpect(status().isNoContent());
     }
 }

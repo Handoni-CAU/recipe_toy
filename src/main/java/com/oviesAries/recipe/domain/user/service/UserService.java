@@ -7,7 +7,7 @@ public interface UserService {
 
     User getUserByUserName(String userName);
 
-    void deleteUser(Long id);
+    void deleteUserById(Long id);
 
     User getUserById(Long id);
 }

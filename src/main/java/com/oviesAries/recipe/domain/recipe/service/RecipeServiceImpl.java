@@ -40,7 +40,7 @@ public class RecipeServiceImpl implements RecipeService{
     public Recipe createRecipe(String recipeName) {
         Recipe recipe = Recipe.builder()
                 .dishName(recipeName)
-                .steps(new ArrayList<>())
+                .recipeSteps(new ArrayList<>())
                 .build();
 
         recipeRepository.save(recipe);
@@ -53,16 +53,16 @@ public class RecipeServiceImpl implements RecipeService{
         Recipe recipe = recipeRepository.findByDishName(dishName)
                 .orElseThrow(() -> new NoSuchElementException("Recipe with dish name: " + dishName + " does not exist."));
 
-        int currentStepCount = recipe.getSteps().size();
+        int currentStepCount = recipe.getRecipeSteps().size();
         step.setStepOrder(currentStepCount + 1);
 
         step.setRecipe(recipe);
 
-        if (recipe.getSteps() == null) {
-            recipe.setSteps(new ArrayList<>());
+        if (recipe.getRecipeSteps() == null) {
+            recipe.setRecipeSteps(new ArrayList<>());
         }
 
-        recipe.getSteps().add(step);
+        recipe.getRecipeSteps().add(step);
         return recipeStepRepository.save(step);
     }
 
