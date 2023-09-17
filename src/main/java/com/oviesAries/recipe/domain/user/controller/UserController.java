@@ -68,18 +68,18 @@ public class UserController {
 //    }
 
 
-    @GetMapping("/{userId}/ingredients")
-    public ResponseEntity<List<UserIngredientResponse>> getAllIngredient(
-            @PathVariable Long userId) {
-
-        List<UserIngredient> recipeIngredients = userService.getAllUserIngredient(userId);
-
-        List<UserIngredientResponse> response = recipeIngredients.stream()
-                .map(UserMapper::toIngredientResponse)
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok(response);
-    }
+//    @GetMapping("/{userId}/ingredients")
+//    public ResponseEntity<List<UserIngredientResponse>> getAllIngredient(
+//            @PathVariable Long userId) {
+//
+//        List<UserIngredient> recipeIngredients = userService.getAllUserIngredient(userId);
+//
+//        List<UserIngredientResponse> response = recipeIngredients.stream()
+//                .map(UserMapper::toIngredientResponse)
+//                .collect(Collectors.toList());
+//
+//        return ResponseEntity.ok(response);
+//    }
 
 //    @GetMapping("id/{id}")
 //    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long id) {

@@ -26,14 +26,15 @@ public class UserIngredientDTO {
     @NotNull(message = "재료 수량은 필수값")
     private Long quantity;
 
-//    private Integer userIngredientId;
+    private Long userIngredientId;
 
     public static UserIngredientDTO of(
             final String ingredientName,
             final String icon,
-            final Long quantity
+            final Long quantity,
+            final Long userIngredientId
             ) {
-        return new UserIngredientDTO(ingredientName, icon, quantity);
+        return new UserIngredientDTO(ingredientName, icon, quantity, userIngredientId);
     }
 
 

@@ -27,3 +27,7 @@ security:
     token:
       secret-key: your_jwt_secret_key_value
       expire-length: 3600000
+
+cors:
+  allowed-origin: http://localhost:8080
+
