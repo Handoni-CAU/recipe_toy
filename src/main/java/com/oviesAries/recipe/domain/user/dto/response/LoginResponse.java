@@ -1,13 +1,10 @@
 package com.oviesAries.recipe.domain.user.dto.response;
 
 import com.oviesAries.recipe.domain.user.domain.Email;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 
-
+@Builder
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
