@@ -1,13 +1,13 @@
 package com.oviesAries.recipe.domain.user.controller;
 
-import com.oviesAries.recipe.domain.entity.User;
+import com.oviesAries.recipe.domain.user.annotation.Authenticated;
+import com.oviesAries.recipe.domain.user.annotation.Member;
 import com.oviesAries.recipe.domain.user.application.AuthService;
+import com.oviesAries.recipe.domain.user.domain.AuthPrincipal;
 import com.oviesAries.recipe.domain.user.dto.request.LoginRequest;
 import com.oviesAries.recipe.domain.user.dto.request.SignUpRequest;
-import com.oviesAries.recipe.domain.user.dto.request.UserResponseDTO;
 import com.oviesAries.recipe.domain.user.dto.response.LoginResponse;
 import com.oviesAries.recipe.domain.user.dto.response.SignupResponse;
-import com.oviesAries.recipe.domain.user.dto.response.UserCreateRequest;
 import com.oviesAries.recipe.domain.user.service.UserService;
 import com.oviesAries.recipe.domain.entity.UserIngredient;
 import com.oviesAries.recipe.domain.user.dto.request.UserIngredientDTO;
@@ -45,8 +45,10 @@ public class UserController {
         return ResponseEntity.ok(loginResponse);
     }
 
+    @Member
     @PostMapping("/{userId}/ingredients")
-    public ResponseEntity<UserIngredientResponse> createRecipeIngredient(
+    public ResponseEntity<UserIngredientResponse> createUserIngredient(
+            @Authenticated final AuthPrincipal authPrincipal,
             @PathVariable Long userId,
             @RequestBody UserIngredientDTO ingredientDTO) {
 

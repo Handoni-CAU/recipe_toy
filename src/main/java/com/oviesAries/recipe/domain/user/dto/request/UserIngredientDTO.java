@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
+
 @Data
 @Builder
 @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -15,22 +17,24 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserIngredientDTO {
 
-    private Long id;
+    @NotNull(message = "재료 이름은 필수")
     private String ingredientName;
+
+    @NotNull(message = "재료 아이콘은 필수")
     private String icon;
-    private Integer quantity;
-    private Integer userIngredientId;
 
-    public static UserIngredientDTO fromEntity(UserIngredient userIngredient) {
-        UserIngredientDTO dto = new UserIngredientDTO();
+    @NotNull(message = "재료 수량은 필수값")
+    private Long quantity;
 
-        dto.setId(userIngredient.getId());
-        dto.setIngredientName(userIngredient.getIngredient().getName());
-        dto.setIcon(userIngredient.getIngredient().getIcon());
-        dto.setQuantity(userIngredient.getQuantity());
-        dto.setUserIngredientId(userIngredient.getUserIngredientId());
+//    private Integer userIngredientId;
 
-        return dto;
+    public static UserIngredientDTO of(
+            final String ingredientName,
+            final String icon,
+            final Long quantity
+            ) {
+        return new UserIngredientDTO(ingredientName, icon, quantity);
     }
+
 
 }
