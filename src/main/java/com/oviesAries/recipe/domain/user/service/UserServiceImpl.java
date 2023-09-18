@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -69,12 +70,20 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NoSuchElementException("Recipe with user: " + userId + " does not exist."));
 
-        Ingredient ingredient = Ingredient.builder()
-                .name(request.getProductId())
-                .icon(request.getIcon())
-                .build();
+        Optional<Ingredient> existingIngredient = ingredientRepository.findByName(request.getProductId());
 
-        Ingredient savedIngredient = ingredientRepository.save(ingredient);
+        Ingredient savedIngredient;
+
+        if (existingIngredient.isPresent()) {
+            savedIngredient = existingIngredient.get();  // 이미 존재하는 ingredient를 사용
+        } else {
+            Ingredient ingredient = Ingredient.builder()
+                    .name(request.getProductId())
+                    .icon(request.getIcon())
+                    .build();
+
+            savedIngredient = ingredientRepository.save(ingredient);
+        }
 
         UserIngredient userIngredient = UserIngredient.builder()
                 .user(user)
