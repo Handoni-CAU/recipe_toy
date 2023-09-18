@@ -3,6 +3,7 @@ package com.oviesAries.recipe.domain.recipe.service;
 import com.oviesAries.recipe.domain.entity.Recipe;
 import com.oviesAries.recipe.domain.entity.RecipeIngredient;
 import com.oviesAries.recipe.domain.entity.RecipeStep;
+import com.oviesAries.recipe.domain.entity.User;
 import com.oviesAries.recipe.domain.recipe.dto.request.RecipeCreateDTO;
 
 
@@ -33,6 +34,8 @@ public interface RecipeService {
     RecipeIngredient addIngredientToRecipe(Long id, RecipeIngredient ingredient);
 
     void deleteRecipeIngredient(Long recipeId, Integer ingredientOrderToRemove);
+
+    public List<Recipe> findRecipesByUserIngredients(Long userId);
 
 
 }

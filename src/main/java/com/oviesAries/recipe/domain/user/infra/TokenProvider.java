@@ -1,11 +1,13 @@
 package com.oviesAries.recipe.domain.user.infra;
 
 import io.jsonwebtoken.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
+@Slf4j
 @Component
 public class TokenProvider {
 
@@ -17,6 +19,7 @@ public class TokenProvider {
             @Value("${security.jwt.token.expire-length}") final long validityInMilliseconds) {
         this.secretKey = secretKey;
         this.validityInMilliseconds = validityInMilliseconds;
+        log.info("Injected secret key: {}", secretKey); // 여기서 로깅을 통해 값 확인
     }
 
     public String createToken(final String payload) {

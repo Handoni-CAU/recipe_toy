@@ -61,29 +61,20 @@ public class UserController {
         return ResponseEntity.created(URI.create("/cart-items/" + user.getId())).build();
     }
 
-//    @GetMapping("username/{userName}")
-//    public ResponseEntity<UserResponseDTO> getUserByUserName(@PathVariable String userName) {
-//        User user = userService.getUserByUserName(userName);
-//        if (user == null){
-//            return ResponseEntity.notFound().build();
-//        }
-//        UserResponseDTO response = new UserResponseDTO(user.getId(), user.getUserName(), user.getPassword());
-//        return ResponseEntity.ok(response);
-//    }
+    @Member
+    @GetMapping("/ingredients")
+    public ResponseEntity<List<UserIngredientResponse>> getAllIngredient(
+            @Authenticated final AuthPrincipal authPrincipal
+            ) {
 
+        List<UserIngredient> userIngredients = userService.getAllUserIngredient(authPrincipal.getId());
 
-//    @GetMapping("/{userId}/ingredients")
-//    public ResponseEntity<List<UserIngredientResponse>> getAllIngredient(
-//            @PathVariable Long userId) {
-//
-//        List<UserIngredient> recipeIngredients = userService.getAllUserIngredient(userId);
-//
-//        List<UserIngredientResponse> response = recipeIngredients.stream()
-//                .map(UserMapper::toIngredientResponse)
-//                .collect(Collectors.toList());
-//
-//        return ResponseEntity.ok(response);
-//    }
+        List<UserIngredientResponse> response = userIngredients.stream()
+                .map(UserMapper::toIngredientResponse)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(response);
+    }
 
 //    @GetMapping("id/{id}")
 //    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long id) {

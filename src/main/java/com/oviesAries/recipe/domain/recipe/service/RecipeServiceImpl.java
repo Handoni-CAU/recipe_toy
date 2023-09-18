@@ -1,14 +1,12 @@
 package com.oviesAries.recipe.domain.recipe.service;
 
-import com.oviesAries.recipe.domain.entity.Ingredient;
-import com.oviesAries.recipe.domain.entity.Recipe;
-import com.oviesAries.recipe.domain.entity.RecipeIngredient;
-import com.oviesAries.recipe.domain.entity.RecipeStep;
+import com.oviesAries.recipe.domain.entity.*;
 import com.oviesAries.recipe.domain.dao.IngredientRepository;
 import com.oviesAries.recipe.domain.recipe.dao.RecipeIngredientRepository;
 import com.oviesAries.recipe.domain.recipe.dao.RecipeRepository;
 import com.oviesAries.recipe.domain.recipe.dao.RecipeStepRepository;
 import com.oviesAries.recipe.domain.recipe.dto.request.RecipeCreateDTO;
+import com.oviesAries.recipe.domain.user.dao.UserIngredientRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +26,7 @@ public class RecipeServiceImpl implements RecipeService{
     private final RecipeStepRepository recipeStepRepository;
     private final RecipeIngredientRepository recipeIngredientRepository;
     private final IngredientRepository ingredientRepository;
+    private final UserIngredientRepository userIngredientRepository;
 
     @Override
     public List<Recipe> getAllRecipes() {
@@ -185,6 +185,10 @@ public class RecipeServiceImpl implements RecipeService{
                 recipeStepRepository.save(step);
             }
         }
+    }
+
+    public List<Recipe> findRecipesByUserIngredients(Long userId) {
+        return recipeIngredientRepository.findRecipesByUserId(userId);
     }
 
 }
