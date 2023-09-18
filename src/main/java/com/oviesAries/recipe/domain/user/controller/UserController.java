@@ -76,16 +76,6 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-//    @GetMapping("id/{id}")
-//    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long id) {
-//        User user = userService.getUserById(id);
-//        if (user == null){
-//            return ResponseEntity.notFound().build();
-//        }
-//        UserResponseDTO response = new UserResponseDTO(user.getId(), user.getUserName(), user.getPassword());
-//        return ResponseEntity.ok(response);
-//    }
-
     @DeleteMapping("{id}")
     public ResponseEntity<Void> deleteUserById(@PathVariable Long id) {
         userService.deleteUserById(id);

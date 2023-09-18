@@ -203,10 +203,6 @@ public class RecipeServiceImpl implements RecipeService{
         }
     }
 
-//    public List<Recipe> findRecipesByUserIngredients(Long userId) {
-//        return recipeRepository.findRecipesByUserId(userId);
-//    }
-
     public List<Recipe> findRecipesByUserIngredients(Long userId) {
 
         User user = userRepository.findById(userId)
