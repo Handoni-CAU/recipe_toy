@@ -7,7 +7,10 @@ import com.oviesAries.recipe.domain.recipe.dao.RecipeRepository;
 import com.oviesAries.recipe.domain.recipe.dao.RecipeStepRepository;
 import com.oviesAries.recipe.domain.recipe.dto.request.RecipeCreateDTO;
 import com.oviesAries.recipe.domain.user.dao.UserIngredientRepository;
+import com.oviesAries.recipe.domain.user.dao.UserRepository;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.TypedQuery;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.OptimisticLockingFailureException;
@@ -22,11 +25,16 @@ import java.util.stream.Collectors;
 @Slf4j
 public class RecipeServiceImpl implements RecipeService{
 
+    private final EntityManager entityManager;
+
     private final RecipeRepository recipeRepository;
     private final RecipeStepRepository recipeStepRepository;
     private final RecipeIngredientRepository recipeIngredientRepository;
     private final IngredientRepository ingredientRepository;
+
     private final UserIngredientRepository userIngredientRepository;
+
+    private final UserRepository userRepository;
 
     @Override
     public List<Recipe> getAllRecipes() {
@@ -75,15 +83,23 @@ public class RecipeServiceImpl implements RecipeService{
         Recipe recipe = recipeRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Recipe with dish name: " + id + " does not exist."));
 
-        Ingredient ingredient = Ingredient.builder()
-                .name(recipeIngredient.getIngredient().getName())
-                .icon(recipeIngredient.getIngredient().getIcon())
-                .build();
+        Optional<Ingredient> existingIngredient = ingredientRepository.findByName(recipeIngredient.getIngredient().getName());
+
+        Ingredient savedIngredient;
+
+        if (existingIngredient.isPresent()) {
+            savedIngredient = existingIngredient.get();  // 이미 존재하는 ingredient를 사용
+        } else {
+            Ingredient ingredient = Ingredient.builder()
+                    .name(recipeIngredient.getIngredient().getName())
+                    .icon(recipeIngredient.getIngredient().getIcon())
+                    .build();
+
+            savedIngredient = ingredientRepository.save(ingredient);
+        }
 
         int currentSequenceCount = recipe.getRecipeIngredients().size();
         recipeIngredient.setRecipeIngredientId(currentSequenceCount + 1);
-
-        Ingredient savedIngredient = ingredientRepository.save(ingredient);
 
         recipeIngredient.setIngredient(savedIngredient);
         recipeIngredient.setRecipe(recipe);
@@ -187,8 +203,25 @@ public class RecipeServiceImpl implements RecipeService{
         }
     }
 
+//    public List<Recipe> findRecipesByUserIngredients(Long userId) {
+//        return recipeRepository.findRecipesByUserId(userId);
+//    }
+
     public List<Recipe> findRecipesByUserIngredients(Long userId) {
-        return recipeRepository.findRecipesByUserId(userId);
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NoSuchElementException("Recipe with user: " + userId + " does not exist."));
+
+
+        String jpql = "SELECT r FROM Recipe r WHERE NOT EXISTS ("
+                + " SELECT ri FROM RecipeIngredient ri WHERE ri.recipe = r AND "
+                + " (ri.ingredient NOT IN (SELECT ui.ingredient FROM UserIngredient ui WHERE ui.user = :user) OR "
+                + " ri.quantity > (SELECT ui.quantity FROM UserIngredient ui WHERE ui.user = :user AND ui.ingredient = ri.ingredient)))";
+
+        TypedQuery<Recipe> query = entityManager.createQuery(jpql, Recipe.class);
+        query.setParameter("user", user);
+        return query.getResultList();
     }
+
 
 }
