@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "RECIPE_INGREDIENTS")
+@Table(name = "recipe_ingredients")
 public class RecipeIngredient {
 
     @Id

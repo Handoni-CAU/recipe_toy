@@ -27,7 +27,6 @@ public class UserServiceImpl implements UserService {
     private final UserIngredientRepository userIngredientRepository;
     private final IngredientRepository ingredientRepository;
 
-    private final PasswordEncoder passwordEncoder;
     private final IngredientMapper ingredientMapper;
 
     @Override
@@ -65,32 +64,37 @@ public class UserServiceImpl implements UserService {
         return userIngredientRepository.findById(id).orElse(null);
     }
 
-    @Override
-    public UserIngredient addIngredientToUser(Long userId, UserIngredient userIngredient) {
+    @Transactional
+    public UserIngredient addIngredient(final UserIngredientDTO request, final Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NoSuchElementException("Recipe with user: " + userId + " does not exist."));
 
         Ingredient ingredient = Ingredient.builder()
-                .name(userIngredient.getIngredient().getName())
-                .icon(userIngredient.getIngredient().getIcon())
+                .name(request.getProductId())
+                .icon(request.getIcon())
                 .build();
-
-        int currentSequenceCount = user.getUserIngredients().size();
-        userIngredient.setUserIngredientId(currentSequenceCount + 1);
 
         Ingredient savedIngredient = ingredientRepository.save(ingredient);
 
-        userIngredient.setIngredient(savedIngredient);
-        userIngredient.setUser(user);
+        UserIngredient userIngredient = UserIngredient.builder()
+                .user(user)
+                .ingredient(savedIngredient)
+                .quantity(request.getQuantity())
+                .build();
 
+        int currentSequenceCount = user.getUserIngredients().size();
+        userIngredient.setUserIngredientId((long) (currentSequenceCount + 1));
 
         if (user.getUserIngredients() == null) {
             user.updateUserIngredients(new ArrayList<>());
         }
 
-        user.getUserIngredients().add(userIngredient);
+        user.addUserIngredient(userIngredient);
+
         return userIngredientRepository.save(userIngredient);
     }
+
+    // delete
 
     @Override
     public void deleteUserIngredient(Long userId, Integer ingredientOrderToRemove) {
@@ -118,17 +122,6 @@ public class UserServiceImpl implements UserService {
             }
         }
     }
-
-    @Transactional
-    public UserIngredientResponse create(final AuthPrincipal authPrincipal, final List<UserIngredientDTO> request) {
-        log.info("주문 생성 memberId: {}", authPrincipal.getId());
-        UserIngredient user = ingredientMapper.mapFrom(authPrincipal.getId(), request);
-        // user에서 가져오겠금
-
-        userIngredientRepository.save(user);
-        return UserIngredientResponse.from(user.getUser());
-    }
-
 
 
 

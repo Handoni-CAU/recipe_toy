@@ -105,5 +105,9 @@ public class User {
                 ", email='" + email + '\'' +
                 '}';
     }
+
+    public void addUserIngredient(UserIngredient userIngredient) {
+        this.userIngredients.add(userIngredient);
+    }
 }
 

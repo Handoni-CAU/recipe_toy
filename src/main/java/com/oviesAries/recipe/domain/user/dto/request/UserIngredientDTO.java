@@ -18,7 +18,7 @@ import javax.validation.constraints.NotNull;
 public class UserIngredientDTO {
 
     @NotNull(message = "재료 이름은 필수")
-    private String ingredientName;
+    private String productId;
 
     @NotNull(message = "재료 아이콘은 필수")
     private String icon;
@@ -29,12 +29,12 @@ public class UserIngredientDTO {
     private Long userIngredientId;
 
     public static UserIngredientDTO of(
-            final String ingredientName,
+            final String productId,
             final String icon,
             final Long quantity,
             final Long userIngredientId
             ) {
-        return new UserIngredientDTO(ingredientName, icon, quantity, userIngredientId);
+        return new UserIngredientDTO(productId, icon, quantity, userIngredientId);
     }
 
 

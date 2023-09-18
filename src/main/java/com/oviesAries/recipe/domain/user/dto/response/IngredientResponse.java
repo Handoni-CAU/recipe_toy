@@ -18,15 +18,15 @@ public class IngredientResponse {
     private Long id;
     private String ingredientName;
     private String icon;
-    private Integer quantity;
-    private Integer userIngredientId;
+    private Long quantity;
+    private Long userIngredientId;
 
     public static IngredientResponse of(
             final Long id,
             final String ingredientName,
             final String icon,
-            final Integer quantity,
-            final Integer userIngredientId
+            final Long quantity,
+            final Long userIngredientId
     ) {
         return new IngredientResponse(id, ingredientName, icon, quantity, userIngredientId);
     }

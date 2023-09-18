@@ -1,5 +1,6 @@
 package com.oviesAries.recipe.domain.user.controller;
 
+import com.oviesAries.recipe.domain.entity.User;
 import com.oviesAries.recipe.domain.user.annotation.Authenticated;
 import com.oviesAries.recipe.domain.user.annotation.Member;
 import com.oviesAries.recipe.domain.user.application.AuthService;
@@ -14,14 +15,17 @@ import com.oviesAries.recipe.domain.user.dto.request.UserIngredientDTO;
 import com.oviesAries.recipe.domain.user.dto.response.UserIngredientResponse;
 import com.oviesAries.recipe.domain.utill.UserMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
@@ -46,15 +50,15 @@ public class UserController {
     }
 
     @Member
-    @PostMapping("/{userId}/ingredients")
+    @PostMapping("/ingredients")
     public ResponseEntity<UserIngredientResponse> createUserIngredient(
             @Authenticated final AuthPrincipal authPrincipal,
-            @PathVariable Long userId,
-            @RequestBody UserIngredientDTO ingredientDTO) {
+            @RequestBody UserIngredientDTO request) {
 
-        UserIngredient savedStep = userService.addIngredientToUser(userId, UserMapper.toIngredientEntity(ingredientDTO));
-
-        return new ResponseEntity<>(UserMapper.toIngredientResponse(savedStep), HttpStatus.CREATED);
+        log.info("[Request] 장바구니 추가 : memberId = {}, productId = {}, quantity = {}",
+                authPrincipal.getId(), request.getProductId(), request.getQuantity());
+        User user = userService.addIngredient(request, authPrincipal.getId()).getUser();
+        return ResponseEntity.created(URI.create("/cart-items/" + user.getId())).build();
     }
 
 //    @GetMapping("username/{userName}")
