@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.sql.Blob;
 
-@Table(name = "INGREDIENT")
+@Table(name = "ingredient")
 @Entity
 @Getter
 @Builder

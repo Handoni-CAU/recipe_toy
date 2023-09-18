@@ -95,7 +95,7 @@ public class DataLoader {
             kimchiStew.setRecipeIngredients(recipeIngredients);
 
 
-// 추가적인 Ingredients
+            // 추가적인 Ingredients
             Ingredient beef = new Ingredient(null, "소고기", null);
             Ingredient rice = new Ingredient(null, "밥", null);
             Ingredient egg = new Ingredient(null, "계란", null);
@@ -104,32 +104,32 @@ public class DataLoader {
 
             ingredientRepository.saveAll(Arrays.asList(beef, rice, egg, soySauce, sesameOil));
 
-// 추가적인 Recipe: 불고기
+            // 추가적인 Recipe: 불고기
             Recipe bulgogi = new Recipe(null, "불고기", "맛있는 소고기 불고기", 2, null, null);
             recipeRepository.save(bulgogi);
 
-// 불고기 Recipe Steps
+            // 불고기 Recipe Steps
             RecipeStep bulgogiStep1 = new RecipeStep(null, bulgogi, 1, "소고기에 간장, 마늘, 참기름을 넣고 밑간한다.", null, 0L);
             RecipeStep bulgogiStep2 = new RecipeStep(null, bulgogi, 2, "팬에 소고기를 넣고 볶는다.", null, 0L);
             recipeStepRepository.saveAll(Arrays.asList(bulgogiStep1, bulgogiStep2));
 
-// 불고기 Recipe Ingredients
+            // 불고기 Recipe Ingredients
             RecipeIngredient bulgogiRi1 = new RecipeIngredient(null, bulgogi, beef, 300, 1);
             RecipeIngredient bulgogiRi2 = new RecipeIngredient(null, bulgogi, soySauce, 50, 2);
             RecipeIngredient bulgogiRi3 = new RecipeIngredient(null, bulgogi, garlic, 10, 3);
             RecipeIngredient bulgogiRi4 = new RecipeIngredient(null, bulgogi, sesameOil, 10, 4 );
             recipeIngredientRepository.saveAll(Arrays.asList(bulgogiRi1, bulgogiRi2, bulgogiRi3, bulgogiRi4));
 
-// 추가적인 Recipe: 계란밥
+            // 추가적인 Recipe: 계란밥
             Recipe eggRice = new Recipe(null, "계란밥", "간단한 계란밥", 1, null, null);
             recipeRepository.save(eggRice);
 
-// 계란밥 Recipe Steps
+            // 계란밥 Recipe Steps
             RecipeStep eggRiceStep1 = new RecipeStep(null, eggRice, 1, "밥을 볶는다.", null, 0L);
             RecipeStep eggRiceStep2 = new RecipeStep(null, eggRice, 2, "계란을 넣고 섞는다.", null, 0L);
             recipeStepRepository.saveAll(Arrays.asList(eggRiceStep1, eggRiceStep2));
 
-// 계란밥 Recipe Ingredients
+            // 계란밥 Recipe Ingredients
             RecipeIngredient eggRiceRi1 = new RecipeIngredient(null, eggRice, rice, 200, 1);
             RecipeIngredient eggRiceRi2 = new RecipeIngredient(null, eggRice, egg, 2, 2);
             recipeIngredientRepository.saveAll(Arrays.asList(eggRiceRi1, eggRiceRi2));

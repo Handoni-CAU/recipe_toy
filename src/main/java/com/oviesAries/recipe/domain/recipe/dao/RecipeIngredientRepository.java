@@ -15,11 +15,4 @@ public interface RecipeIngredientRepository extends JpaRepository<RecipeIngredie
 
     List<RecipeIngredient> findByRecipeId(Long id);
 
-    @Query("SELECT r.recipe FROM RecipeIngredient r " +
-            "LEFT JOIN UserIngredient u ON r.ingredient.name = u.ingredient.name AND u.user.id = :userId " +
-            "WHERE (u.ingredient.name IS NULL OR r.quantity <= u.quantity) " +
-            "GROUP BY r.recipe " +
-            "HAVING COUNT(DISTINCT r.ingredient.name) = COUNT(DISTINCT u.ingredient.name)")
-    List<Recipe> findRecipesByUserId(@Param("userId") Long userId);
-
 }
