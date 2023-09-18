@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
-public class AuthPrincipal {
+public class  AuthPrincipal {
 
     private Long id;
     private String email;

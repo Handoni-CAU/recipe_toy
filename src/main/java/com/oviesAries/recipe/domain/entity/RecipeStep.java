@@ -8,7 +8,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "RECIPE_STEP")
+@Table(name = "recipe_step")
 public class RecipeStep {
 
     @Id

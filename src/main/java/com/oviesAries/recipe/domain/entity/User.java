@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "USER")
+@Table(name = "user")
 @Getter
 @Builder
 @NoArgsConstructor
@@ -104,6 +104,10 @@ public class User {
                 ", password='" + encodedPassword + '\'' +
                 ", email='" + email + '\'' +
                 '}';
+    }
+
+    public void addUserIngredient(UserIngredient userIngredient) {
+        this.userIngredients.add(userIngredient);
     }
 }
 

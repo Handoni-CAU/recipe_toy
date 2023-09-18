@@ -2,14 +2,18 @@ package com.oviesAries.recipe.domain.user.service;
 
 import com.oviesAries.recipe.domain.dao.IngredientRepository;
 import com.oviesAries.recipe.domain.entity.*;
-import com.oviesAries.recipe.domain.recipe.dao.RecipeRepository;
 import com.oviesAries.recipe.domain.user.dao.UserIngredientRepository;
 import com.oviesAries.recipe.domain.user.dao.UserRepository;
+import com.oviesAries.recipe.domain.user.domain.AuthPrincipal;
 import com.oviesAries.recipe.domain.user.domain.EncodedPassword;
+import com.oviesAries.recipe.domain.user.domain.IngredientMapper;
+import com.oviesAries.recipe.domain.user.dto.request.UserIngredientDTO;
+import com.oviesAries.recipe.domain.user.dto.response.UserIngredientResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +26,9 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserIngredientRepository userIngredientRepository;
     private final IngredientRepository ingredientRepository;
-    private final PasswordEncoder passwordEncoder;
+
+    private final IngredientMapper ingredientMapper;
+
     @Override
     public User createUser(String username, EncodedPassword password) {
         User user = User.builder()
@@ -58,32 +64,37 @@ public class UserServiceImpl implements UserService {
         return userIngredientRepository.findById(id).orElse(null);
     }
 
-    @Override
-    public UserIngredient addIngredientToUser(Long userId, UserIngredient userIngredient) {
+    @Transactional
+    public UserIngredient addIngredient(final UserIngredientDTO request, final Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NoSuchElementException("Recipe with user: " + userId + " does not exist."));
 
         Ingredient ingredient = Ingredient.builder()
-                .name(userIngredient.getIngredient().getName())
-                .icon(userIngredient.getIngredient().getIcon())
+                .name(request.getProductId())
+                .icon(request.getIcon())
                 .build();
-
-        int currentSequenceCount = user.getUserIngredients().size();
-        userIngredient.setUserIngredientId(currentSequenceCount + 1);
 
         Ingredient savedIngredient = ingredientRepository.save(ingredient);
 
-        userIngredient.setIngredient(savedIngredient);
-        userIngredient.setUser(user);
+        UserIngredient userIngredient = UserIngredient.builder()
+                .user(user)
+                .ingredient(savedIngredient)
+                .quantity(request.getQuantity())
+                .build();
 
+        int currentSequenceCount = user.getUserIngredients().size();
+        userIngredient.setUserIngredientId((long) (currentSequenceCount + 1));
 
         if (user.getUserIngredients() == null) {
             user.updateUserIngredients(new ArrayList<>());
         }
 
-        user.getUserIngredients().add(userIngredient);
+        user.addUserIngredient(userIngredient);
+
         return userIngredientRepository.save(userIngredient);
     }
+
+    // delete
 
     @Override
     public void deleteUserIngredient(Long userId, Integer ingredientOrderToRemove) {
@@ -111,4 +122,5 @@ public class UserServiceImpl implements UserService {
             }
         }
     }
+
 }

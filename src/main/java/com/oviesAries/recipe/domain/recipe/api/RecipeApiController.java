@@ -10,6 +10,9 @@ import com.oviesAries.recipe.domain.recipe.dto.response.RecipeIngredientResponse
 import com.oviesAries.recipe.domain.recipe.dto.response.RecipeResponse;
 import com.oviesAries.recipe.domain.recipe.dto.response.RecipeStepResponse;
 import com.oviesAries.recipe.domain.recipe.service.RecipeService;
+import com.oviesAries.recipe.domain.user.annotation.Authenticated;
+import com.oviesAries.recipe.domain.user.annotation.Member;
+import com.oviesAries.recipe.domain.user.domain.AuthPrincipal;
 import com.oviesAries.recipe.domain.utill.RecipeMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -29,6 +32,20 @@ public class RecipeApiController {
     @GetMapping
     public ResponseEntity<List<RecipeResponse>> getAllRecipes() {
         List<Recipe> recipes = recipeService.getAllRecipes();
+
+        List<RecipeResponse> response = recipes.stream()
+                .map(RecipeMapper::toRecipeResponse)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(response);
+    }
+
+    @Member
+    @GetMapping("/filter")
+    public ResponseEntity<List<RecipeResponse>> getAllRecipesByUserIngredients(
+            @Authenticated final AuthPrincipal authPrincipal
+    ) {
+        List<Recipe> recipes = recipeService.findRecipesByUserIngredients(authPrincipal.getId());
 
         List<RecipeResponse> response = recipes.stream()
                 .map(RecipeMapper::toRecipeResponse)

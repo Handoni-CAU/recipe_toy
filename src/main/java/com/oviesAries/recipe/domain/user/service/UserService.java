@@ -3,6 +3,7 @@ package com.oviesAries.recipe.domain.user.service;
 import com.oviesAries.recipe.domain.entity.User;
 import com.oviesAries.recipe.domain.entity.UserIngredient;
 import com.oviesAries.recipe.domain.user.domain.EncodedPassword;
+import com.oviesAries.recipe.domain.user.dto.request.UserIngredientDTO;
 
 import java.util.List;
 
@@ -19,9 +20,8 @@ public interface UserService {
 
     UserIngredient getUserIngredientById(Long id);
 
-    UserIngredient addIngredientToUser(Long userId, UserIngredient ingredient);
 
     void deleteUserIngredient(Long userId, Integer ingredientOrderToRemove);
 
-
+    UserIngredient addIngredient(UserIngredientDTO request, Long id);
 }
