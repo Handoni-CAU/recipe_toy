@@ -63,31 +63,30 @@ public class UserController {
 
     @Member
     @GetMapping("/ingredients")
-    public ResponseEntity<List<UserIngredientResponse>> getAllIngredient(
+    public ResponseEntity<UserIngredientResponse> getAllIngredient(
             @Authenticated final AuthPrincipal authPrincipal
             ) {
 
-        List<UserIngredient> userIngredients = userService.getAllUserIngredient(authPrincipal.getId());
+        User userById = userService.getUserById(authPrincipal.getId());
 
-        List<UserIngredientResponse> response = userIngredients.stream()
-                .map(UserMapper::toIngredientResponse)
-                .collect(Collectors.toList());
+        UserIngredientResponse response = UserIngredientResponse.from(userById);
 
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUserById(@PathVariable Long id) {
         userService.deleteUserById(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 
 
-    @DeleteMapping("/{userId}/ingredients/{recipeIngredientId}")
-    public ResponseEntity<UserIngredientResponse> deleteIngredient(
-            @PathVariable Long userId,
-            @PathVariable Integer recipeIngredientId) {
-        userService.deleteUserIngredient(userId, recipeIngredientId);
+    @Member
+    @DeleteMapping("/ingredients/{recipeIngredientId}")
+    public ResponseEntity<Void> deleteIngredient(
+            @Authenticated final AuthPrincipal authPrincipal,
+            @PathVariable Long recipeIngredientId) {
+        userService.deleteUserIngredient(authPrincipal.getId(), recipeIngredientId);
         return ResponseEntity.noContent().build();
     }
 
