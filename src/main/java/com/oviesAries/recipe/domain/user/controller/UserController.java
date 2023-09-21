@@ -55,8 +55,6 @@ public class UserController {
             @Authenticated final AuthPrincipal authPrincipal,
             @RequestBody UserIngredientDTO request) {
 
-        log.info("[Request] 장바구니 추가 : memberId = {}, productId = {}, quantity = {}",
-                authPrincipal.getId(), request.getProductId(), request.getQuantity());
         User user = userService.addIngredient(request, authPrincipal.getId()).getUser();
         return ResponseEntity.created(URI.create("/cart-items/" + user.getId())).build();
     }
