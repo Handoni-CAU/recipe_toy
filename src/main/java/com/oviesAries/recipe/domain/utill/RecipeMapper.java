@@ -36,6 +36,12 @@ public class RecipeMapper {
     }
 
     public static RecipeResponse toNewResponse(Recipe recipe) {
+        if(recipe == null
+                || recipe.getRecipeSteps() == null
+                || recipe.getRecipeIngredients() == null) {
+            return null;
+        }
+
         return RecipeResponse.builder()
                 .id(recipe.getId())
                 .dishName(recipe.getDishName())
@@ -79,6 +85,9 @@ public class RecipeMapper {
     }
 
     public static List<RecipeIngredientDTO> toIngredientDTOList(List<RecipeIngredient> ingredients) {
+        if (ingredients == null) {
+            return new ArrayList<>();
+        }
         return ingredients.stream()
                 .map(ingredient -> RecipeIngredientDTO.builder()
                         .id(ingredient.getId())

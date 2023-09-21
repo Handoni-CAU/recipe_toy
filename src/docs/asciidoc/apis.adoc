@@ -7,20 +7,14 @@
 :sectlinks:
 
 == 회원
-=== 회원 생성
+=== 회원 가입
 ==== Request
-include::{snippets}/users/createUser/http-request.adoc[]
+include::{snippets}/users/signup/http-request.adoc[]
 ==== Response
-include::{snippets}/users/createUser/http-response.adoc[]
+include::{snippets}/users/signup/http-response.adoc[]
 
-=== Id로 회원 가져오기
+=== 로그인
 ==== Request
-include::{snippets}/users/getUserById/http-request.adoc[]
+include::{snippets}/users/login/http-request.adoc[]
 ==== Response
-include::{snippets}/users/getUserById/http-response.adoc[]
-
-=== 회원 삭제
-==== Request
-include::{snippets}/users/deleteUser/http-request.adoc[]
-==== Response
-include::{snippets}/users/deleteUser/http-response.adoc[]
+include::{snippets}/users/login/http-response.adoc[]
