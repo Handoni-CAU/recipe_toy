@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByUserName(userName).orElse(null);
     }
 
-    @Override
+    @Transactional
     public void deleteUserById(Long id) {
         userRepository.deleteById(id);
     }
@@ -75,7 +75,7 @@ public class UserServiceImpl implements UserService {
         Ingredient savedIngredient;
 
         if (existingIngredient.isPresent()) {
-            savedIngredient = existingIngredient.get();  // 이미 존재하는 ingredient를 사용
+            savedIngredient = existingIngredient.get();
         } else {
             Ingredient ingredient = Ingredient.builder()
                     .name(request.getProductId())
@@ -105,8 +105,8 @@ public class UserServiceImpl implements UserService {
 
     // delete
 
-    @Override
-    public void deleteUserIngredient(Long userId, Integer ingredientOrderToRemove) {
+    @Transactional
+    public void deleteUserIngredient(Long userId, Long ingredientOrderToRemove) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NoSuchElementException("Recipe with user: " + userId + " does not exist."));
 

@@ -21,7 +21,7 @@ public interface UserService {
     UserIngredient getUserIngredientById(Long id);
 
 
-    void deleteUserIngredient(Long userId, Integer ingredientOrderToRemove);
+    void deleteUserIngredient(Long userId, Long ingredientOrderToRemove);
 
     UserIngredient addIngredient(UserIngredientDTO request, Long id);
 }

@@ -208,7 +208,6 @@ public class RecipeServiceImpl implements RecipeService{
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NoSuchElementException("Recipe with user: " + userId + " does not exist."));
 
-
         String jpql = "SELECT r FROM Recipe r WHERE NOT EXISTS ("
                 + " SELECT ri FROM RecipeIngredient ri WHERE ri.recipe = r AND "
                 + " (ri.ingredient NOT IN (SELECT ui.ingredient FROM UserIngredient ui WHERE ui.user = :user) OR "

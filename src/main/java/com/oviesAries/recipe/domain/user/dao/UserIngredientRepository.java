@@ -9,4 +9,5 @@ public interface UserIngredientRepository extends JpaRepository<UserIngredient, 
 
     List<UserIngredient> findByUserId(Long id);
 
+
 }
