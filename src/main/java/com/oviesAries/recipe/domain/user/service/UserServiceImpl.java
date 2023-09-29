@@ -103,8 +103,6 @@ public class UserServiceImpl implements UserService {
         return userIngredientRepository.save(userIngredient);
     }
 
-    // delete
-
     @Transactional
     public void deleteUserIngredient(Long userId, Long ingredientOrderToRemove) {
         User user = userRepository.findById(userId)
