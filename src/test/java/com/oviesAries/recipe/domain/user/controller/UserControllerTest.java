@@ -2,6 +2,7 @@ package com.oviesAries.recipe.domain.user.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oviesAries.recipe.domain.user.application.AuthService;
+import com.oviesAries.recipe.domain.user.dao.UserRepository;
 import com.oviesAries.recipe.domain.user.dto.request.LoginRequest;
 import com.oviesAries.recipe.domain.user.dto.request.SignUpRequest;
 import com.oviesAries.recipe.domain.user.dto.response.LoginResponse;
@@ -47,6 +48,9 @@ class UserControllerTest {
 
     @MockBean
     private UserService userService;
+
+    @MockBean
+    private UserRepository userRepository;
 
     @MockBean
     private AuthService authService;
