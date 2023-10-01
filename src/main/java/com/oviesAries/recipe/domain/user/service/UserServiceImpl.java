@@ -72,18 +72,7 @@ public class UserServiceImpl implements UserService {
 
         Optional<Ingredient> existingIngredient = ingredientRepository.findByName(request.getProductId());
 
-        Ingredient savedIngredient;
-
-        if (existingIngredient.isPresent()) {
-            savedIngredient = existingIngredient.get();
-        } else {
-            Ingredient ingredient = Ingredient.builder()
-                    .name(request.getProductId())
-                    .icon(request.getIcon())
-                    .build();
-
-            savedIngredient = ingredientRepository.save(ingredient);
-        }
+        Ingredient savedIngredient = existingIngredient.get();
 
         UserIngredient userIngredient = UserIngredient.builder()
                 .user(user)
