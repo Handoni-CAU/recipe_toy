@@ -17,7 +17,6 @@ public class UserMapper {
                         .name(ingredientDTO.getProductId())
                         .build())
                 .quantity(ingredientDTO.getQuantity())
-                .userIngredientId(ingredientDTO.getUserIngredientId())
                 .build();
     }
 
