@@ -3,11 +3,7 @@ package com.oviesAries.recipe.domain.utill;
 import com.oviesAries.recipe.domain.entity.Ingredient;
 import com.oviesAries.recipe.domain.entity.UserIngredient;
 import com.oviesAries.recipe.domain.user.dto.request.UserIngredientDTO;
-import com.oviesAries.recipe.domain.user.dto.response.IngredientResponse;
 import com.oviesAries.recipe.domain.user.dto.response.UserIngredientResponse;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class UserMapper {
 
